@@ -1,9 +1,9 @@
 # 말로(Mallo) TTS Showcase
 
-말로 프로젝트의 Adaptive TTS Level 0·1·2 비교 청음용 내부 쇼케이스입니다.
+말로 프로젝트의 TTS 모델별 결과와 Adaptive TTS Level 0·1·2 비교 청음용 쇼케이스입니다.
 
 - `index.html`: 쇼케이스 진입 페이지
-- `adaptive-levels.html`: v1 비교 결과
+- `model-comparison.html`: TTS 모델별 비교 결과
 - `adaptive-levels-v2.html`: v2 개선 결과
 - `assets/audio/`: HTML에서 분리한 WAV 파일
 
