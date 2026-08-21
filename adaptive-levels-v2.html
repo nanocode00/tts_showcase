@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>말로(Mallo) Adaptive TTS 빠르기 및 레벨(Level 0 vs 1 vs 2) 비교 쇼케이스 v2</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI', Roboto, sans-serif;
+            background: #0b1120;
+            color: #f8fafc;
+            padding: 25px;
+            max-width: 1520px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #38bdf8;
+            font-size: 1.9em;
+            margin-bottom: 6px;
+        }
+        p.subtitle {
+            color: #94a3b8;
+            font-size: 1.05em;
+            margin-bottom: 25px;
+        }
+        .improvements-box {
+            background: #1e293b;
+            border-left: 5px solid #38bdf8;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .improvements-box h4 {
+            margin: 0 0 8px 0;
+            color: #38bdf8;
+            font-size: 1.05em;
+        }
+        .improvements-box ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #cbd5e1;
+            font-size: 0.9em;
+        }
+        .improvements-box li {
+            margin-bottom: 4px;
+        }
+        .grid-header {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .card {
+            background: #1e293b;
+            padding: 18px 20px;
+            border-radius: 12px;
+            border-left: 5px solid #38bdf8;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .card.l0 { border-left-color: #10b981; }
+        .card.l1 { border-left-color: #f59e0b; }
+        .card.l2 { border-left-color: #a855f7; }
+        .card h3 {
+            margin: 0 0 6px 0;
+            font-size: 1.15em;
+        }
+        .card.l0 h3 { color: #34d399; }
+        .card.l1 h3 { color: #fbbf24; }
+        .card.l2 h3 { color: #c084fc; }
+        .card p {
+            margin: 0;
+            font-size: 0.88em;
+            color: #cbd5e1;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .badge.l0 { background: #064e3b; color: #6ee7b7; }
+        .badge.l1 { background: #78350f; color: #fde68a; }
+        .badge.l2 { background: #581c87; color: #e9d5ff; }
+        .table-container {
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #334155;
+            vertical-align: top;
+        }
+        th {
+            background: #020617;
+            color: #94a3b8;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #27354a; }
+        .tag {
+            background: #334155;
+            color: #94a3b8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .cat {
+            color: #38bdf8;
+            font-size: 0.75em;
+            display: block;
+            margin-top: 4px;
+        }
+        .text-box {
+            font-size: 0.93em;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+            min-height: 44px;
+        }
+        .meta-info {
+            font-size: 0.78em;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        audio {
+            height: 32px;
+            width: 100%;
+            max-width: 290px;
+        }
+        .highlight {
+            color: #c084fc;
+            font-weight: 600;
+        }
+        .pause-marker {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <h1>☕ 말로(Mallo) Adaptive TTS 빠르기 및 레벨(Level 0 vs 1 vs 2) 비교 쇼케이스 (v2 개선판)</h1>
+    <p class="subtitle">고령 사용자의 인지·청각 부담을 줄이기 위한 세션별 적응형 TTS의 발화 속도(Speed) 및 문장 구조(Pause/단문 분절) 변환 비교 청음 플레이어입니다.</p>
+
+    <div class="improvements-box">
+        <h4>✨ v2 주요 개선 사항</h4>
+        <ul>
+            <li><strong>가격/수사 한국어 정규화:</strong> '5,200원'이 '오, 이백원'으로 잘못 분리되던 현상을 해결하여 '오천이백원', '만 오천사백원'으로 정확히 발화합니다.</li>
+            <li><strong>분절 기호 발음 오류 해결:</strong> 이상한 소리를 유발하던 비표준 기호(', ... ', '/', '|' 등)를 제거하고 표준 쉼표 및 깨끗한 무음 간격을 적용했습니다.</li>
+            <li><strong>Level 1 vs Level 2 체감 차이 극대화:</strong> 속도 정책을 3단계(1.0x / 0.85x / 0.75x)로 차별화하고, 20개 전 문장에 대해 독립 단문화 분절을 완벽 지원합니다.</li>
+        </ul>
+    </div>
+
+    <div class="grid-header">
+        <div class="card l0">
+            <h3>🟢 Level 0: 기본 안내</h3>
+            <p>• <strong>발화 속도:</strong> <strong>1.0x</strong> (기본 속도)<br>
+            • <strong>문장 구조:</strong> 자연어 원본 문장 유지 (수사 정규화)<br>
+            • <strong>적용 대상:</strong> 일반 주문자 및 세션 첫 대화</p>
+            <span class="badge l0">기본 상태</span>
+        </div>
+        <div class="card l1">
+            <h3>🟡 Level 1: 느린 안내 + Pause</h3>
+            <p>• <strong>발화 속도:</strong> <strong>0.85x</strong> (15% 감속)<br>
+            • <strong>문장 구조:</strong> 항목 및 서술어 사이에 자연스러운 쉼표(Pause) 삽입<br>
+            • <strong>적용 대상:</strong> "천천히 말해줘", "다시 말해줘" 1회 요청 시</p>
+            <span class="badge l1">1단계 완화</span>
+        </div>
+        <div class="card l2">
+            <h3>🟣 Level 2: 초저속 + 단문 분절·정보 강조</h3>
+            <p>• <strong>발화 속도:</strong> <strong>0.75x</strong> (25% 명확한 감속)<br>
+            • <strong>문장 구조:</strong> 메뉴명·수량·가격을 독립 단문([메뉴]. [수량]입니다.)으로 분절<br>
+            • <strong>적용 대상:</strong> "더 천천히", "다시 말해줘" 연속 요청 시</p>
+            <span class="badge l2">최대 인지 배려</span>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 8%;">ID</th>
+                    <th style="width: 30%;">🟢 Level 0 (1.0x / 원본 문장)</th>
+                    <th style="width: 31%;">🟡 Level 1 (0.85x / 쉼표 Pause 삽입)</th>
+                    <th style="width: 31%;">🟣 Level 2 (0.75x / 단문 분절·강조)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_01</span>
+                        <span class="cat">menu_temperature</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>아이스 아메리카노 한 잔을 주문에 담았습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 3.64s | 지연: 17927ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-001.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">아이스 아메리카노 한 잔, 담았습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 4.18s | 지연: 273ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-002.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">아이스 아메리카노. 한 잔입니다. 장바구니에 담았습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 6.73s | 지연: 210ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-003.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_02</span>
+                        <span class="cat">menu_temperature</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>따뜻한 카페라떼 한 잔을 추가했습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 3.37s | 지연: 288ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-004.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">따뜻한 카페라떼 한 잔, 추가했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 4.34s | 지연: 339ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-005.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">따뜻한 카페라떼. 한 잔입니다. 추가했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.94s | 지연: 267ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-006.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_03</span>
+                        <span class="cat">menu_temperature</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>아이스 바닐라라떼와 따뜻한 말차라떼를 준비해 드릴게요.</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.61s | 지연: 176ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-007.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">아이스 바닐라라떼, 따뜻한 말차라떼, 준비해 드릴게요.</span></div>
+                        <div class="meta-info">⏱ 길이: 6.00s | 지연: 285ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-008.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">아이스 바닐라라떼. 따뜻한 말차라떼. 준비해 드릴게요.</span></div>
+                        <div class="meta-info">⏱ 길이: 7.03s | 지연: 355ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-009.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_04</span>
+                        <span class="cat">menu_temperature</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>자몽에이드는 차가운 음료로만 주문하실 수 있습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.25s | 지연: 216ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-010.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">자몽에이드는 차가운 음료로만 주문하실 수 있습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.00s | 지연: 146ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-011.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">자몽에이드는 차가운 음료로만 주문하실 수 있습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.50s | 지연: 139ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-012.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_05</span>
+                        <span class="cat">quantity_unit</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>아메리카노 두 잔과 카페라떼 한 잔을 담았습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.43s | 지연: 168ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-013.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">아메리카노 두 잔, 카페라떼 한 잔, 담았습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.33s | 지연: 210ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-014.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">아메리카노. 두 잔입니다. 카페라떼. 한 잔입니다. 장바구니에 담았습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 9.44s | 지연: 345ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-015.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_06</span>
+                        <span class="cat">quantity_unit</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>캐모마일티 세 잔을 주문하셨습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 3.02s | 지연: 183ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-016.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">캐모마일티 세 잔, 주문하셨습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 3.63s | 지연: 226ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-017.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">캐모마일티. 세 잔입니다. 주문하셨습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.53s | 지연: 246ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-018.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_07</span>
+                        <span class="cat">quantity_unit</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>크로플 아이스크림 두 개를 추가했습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 3.24s | 지연: 121ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-019.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">크로플 아이스크림 두 개, 추가했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 4.27s | 지연: 296ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-020.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">크로플 아이스크림. 두 개입니다. 추가했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.72s | 지연: 234ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-021.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_08</span>
+                        <span class="cat">quantity_unit</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>바스크 치즈 케이크 한 개와 아이스티 네 잔을 확인했습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.61s | 지연: 158ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-022.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">바스크 치즈 케이크 한 개, 아이스티 네 잔, 확인했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.86s | 지연: 265ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-023.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">바스크 치즈 케이크. 한 개입니다. 아이스티. 네 잔입니다. 확인했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 9.12s | 지연: 371ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-024.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_09</span>
+                        <span class="cat">price_total</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>아메리카노 한 잔은 사천칠백원입니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 3.53s | 지연: 142ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-025.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">아메리카노 한 잔, 사천칠백원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 4.20s | 지연: 133ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-026.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">아메리카노. 한 잔입니다. 사천칠백원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 6.01s | 지연: 174ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-027.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_10</span>
+                        <span class="cat">price_total</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>카페라떼 두 잔은 모두 만 사백원입니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 3.72s | 지연: 135ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-028.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">카페라떼 두 잔, 만 사백원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 3.66s | 지연: 155ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-029.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">카페라떼. 두 잔입니다. 만 사백원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.62s | 지연: 223ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-030.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_11</span>
+                        <span class="cat">price_total</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>자몽에이드와 말차라떼 한 잔씩은 모두 칠천 원입니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.81s | 지연: 182ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-031.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">자몽에이드와 말차라떼 한 잔씩, 칠천 원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.50s | 지연: 304ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-032.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">자몽에이드. 말차라떼. 한 잔씩입니다. 금액은 칠천 원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 8.21s | 지연: 255ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-033.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_12</span>
+                        <span class="cat">price_total</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>바스크 치즈 케이크와 크로플 아이스크림의 합계는 만 이천원입니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 5.45s | 지연: 206ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-034.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">바스크 치즈 케이크, 크로플 아이스크림, 합계는 만 이천원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 6.86s | 지연: 326ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-035.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">바스크 치즈 케이크. 크로플 아이스크림. 합계 금액은 만 이천원입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 8.48s | 지연: 311ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-036.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_13</span>
+                        <span class="cat">modify_delete</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>아메리카노 수량을 두 잔에서 한 잔으로 변경했습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.32s | 지연: 193ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-037.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">아메리카노 수량을 두 잔에서, 한 잔으로 변경했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.52s | 지연: 196ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-038.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">아메리카노 수량을 두 잔에서. 한 잔으로 변경했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 6.19s | 지연: 250ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-039.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_14</span>
+                        <span class="cat">modify_delete</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>따뜻한 밀크티를 아이스 밀크티로 변경했습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.17s | 지연: 192ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-040.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">따뜻한 밀크티를, 아이스 밀크티로 변경했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 4.87s | 지연: 194ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-041.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">따뜻한 밀크티를. 아이스 밀크티로 변경했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 5.58s | 지연: 152ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-042.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_15</span>
+                        <span class="cat">modify_delete</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>바닐라라떼 한 잔을 주문에서 삭제했습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 3.71s | 지연: 191ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-043.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">바닐라라떼 한 잔을 주문에서, 삭제했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 4.75s | 지연: 238ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-044.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">바닐라라떼. 한 잔 삭제했습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 4.14s | 지연: 137ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-045.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_16</span>
+                        <span class="cat">modify_delete</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>카페라떼는 그대로 두고 캐모마일티만 삭제할까요?</strong></div>
+                        <div class="meta-info">⏱ 길이: 4.37s | 지연: 129ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-046.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">카페라떼는 그대로 두고, 캐모마일티만 삭제할까요?</span></div>
+                        <div class="meta-info">⏱ 길이: 5.46s | 지연: 177ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-047.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">카페라떼는 그대로 두고. 캐모마일티만 삭제할까요?</span></div>
+                        <div class="meta-info">⏱ 길이: 6.07s | 지연: 179ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-048.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_17</span>
+                        <span class="cat">summary_payment</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>아이스 아메리카노 두 잔과 바스크 치즈 케이크 한 개가 담겨 있습니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 5.45s | 지연: 178ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-049.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">아이스 아메리카노 두 잔, 바스크 치즈 케이크 한 개가 담겨 있습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 6.55s | 지연: 310ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-050.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">아이스 아메리카노 두 잔. 바스크 치즈 케이크 한 개가 담겨 있습니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 7.31s | 지연: 259ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-051.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_18</span>
+                        <span class="cat">summary_payment</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>주문은 자몽에이드 한 잔, 아이스티 한 잔, 크로플 아이스크림 한 개입니다.</strong></div>
+                        <div class="meta-info">⏱ 길이: 6.24s | 지연: 265ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-052.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">주문은 자몽에이드 한 잔, 아이스티 한 잔, 크로플 아이스크림 한 개입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 7.26s | 지연: 279ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-053.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">주문 내역입니다. 자몽에이드. 한 잔입니다. 아이스티. 한 잔입니다. 크로플 아이스크림. 한 개입니다.</span></div>
+                        <div class="meta-info">⏱ 길이: 11.98s | 지연: 478ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-054.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_19</span>
+                        <span class="cat">summary_payment</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>총 결제 금액은 만 오천사백원입니다. 결제를 진행할까요?</strong></div>
+                        <div class="meta-info">⏱ 길이: 5.58s | 지연: 226ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-055.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">총 결제 금액은, 만 오천사백원입니다. 결제를 진행할까요?</span></div>
+                        <div class="meta-info">⏱ 길이: 6.54s | 지연: 210ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-056.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">총 결제 금액입니다. 만 오천사백원입니다. 결제를 진행할까요?</span></div>
+                        <div class="meta-info">⏱ 길이: 8.26s | 지연: 342ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-057.wav"></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="tag">tts_eval_20</span>
+                        <span class="cat">summary_payment</span>
+                    </td>
+                    <td>
+                        <div class="text-box"><strong>주문 내용을 확인했습니다. 카드로 구천구백 원을 결제해 주세요.</strong></div>
+                        <div class="meta-info">⏱ 길이: 5.38s | 지연: 224ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-058.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="pause-marker">주문 내용을 확인했습니다. 카드로, 구천구백 원을, 결제해 주세요.</span></div>
+                        <div class="meta-info">⏱ 길이: 7.17s | 지연: 304ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-059.wav"></audio>
+                    </td>
+                    <td>
+                        <div class="text-box"><span class="highlight">주문 내용을 확인했습니다. 구천구백 원입니다. 카드로 결제해 주세요.</span></div>
+                        <div class="meta-info">⏱ 길이: 8.16s | 지연: 306ms</div>
+                        <audio controls src="assets/audio/adaptive-levels-v2/audio-060.wav"></audio>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        말로(Mallo) Adaptive Voice-first Kiosk • TTS Level 0/1/2 v2 Speed & Segmentation Evaluation
+    </div>
+</body>
+</html>
