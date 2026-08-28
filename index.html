@@ -1,181 +1,593 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>말로(Mallo) TTS 최종 쇼케이스</title>
-  <style>body{max-width:1100px;margin:32px auto;padding:0 16px;font:16px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0b1120;color:#e2e8f0;line-height:1.6}
-h1{color:#38bdf8;font-size:1.85rem;margin-bottom:8px}
-h2{color:#7dd3fc;font-size:1.35rem;margin-top:36px;margin-bottom:12px;border-bottom:1px solid #334155;padding-bottom:8px}
-h3{margin:14px 0 6px 0;font-size:1.05rem}
-article{margin:16px 0;padding:20px;background:#1e293b;border-radius:12px;border:1px solid #334155}
-.original{color:#cbd5e1}
-.normalized{color:#86efac;font-weight:700}
-audio{width:100%;margin-top:8px}
-dl{display:grid;grid-template-columns:130px 1fr;gap:6px}
-dt{color:#94a3b8}
-dd{margin:0}
-small{color:#94a3b8;display:block;margin-top:4px}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;background:#0284c7;color:#fff}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0}
-.nav-card{display:block;padding:20px;background:#1e293b;border:1px solid #334155;border-radius:12px;text-decoration:none;color:#e2e8f0;transition:border-color .2s}
-.nav-card:hover{border-color:#38bdf8}
-.nav-card h3{margin:0 0 8px 0;color:#38bdf8}
-.nav-card p{margin:0;color:#94a3b8;font-size:14px}
-</style>
+  <meta name="description" content="고령 사용자를 위한 MeloTTS 파인튜닝 친절체 모델과 Adaptive Speed Levels(0·1·2) 음성 합성을 비교 청취하는 기술 쇼케이스">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon-192.png">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#1e3932">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="./styles/showcase.css">
 </head>
 <body>
-  <nav style="display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap">
-  <a href="./" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">← 쇼케이스 홈</a>
-  <a href="model-comparison.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">🎧 모델별 비교</a>
-  <a href="speed-levels.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">⚡ Level 0·1·2 비교</a>
-  <a href="results.json" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#94a3b8;background:#1e293b;border:1px solid #334155;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">📋 메타데이터 (JSON)</a>
-</nav>
-
-  <header style="margin-bottom:32px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-      <span class="badge">Mallo Kiosk</span>
-      <span style="color:#94a3b8;font-size:14px">Adaptive Voice-first Order System</span>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://nanocode00.github.io/mallo-intro/" aria-label="말로 소개 홈으로 이동">
+        <span class="brand-mark">mallo</span>
+        <span class="brand-ko">말로</span>
+      </a>
+      <nav class="header-nav" aria-label="메인 네비게이션">
+        <a class="nav-link" href="https://nanocode00.github.io/mallo-intro/">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>소개 홈</span>
+        </a>
+        <a class="nav-link" href="https://nanocode00.github.io/stt_showcase/">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M8 22h8"/></svg>
+          <span>STT</span>
+        </a>
+        <a class="nav-link active" href="https://nanocode00.github.io/tts_showcase/" aria-current="page">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <span>TTS</span>
+        </a>
+        <a class="nav-link nav-kiosk-btn" href="https://mallo-kiosk.vercel.app/" target="_blank" rel="noopener noreferrer">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          <span>키오스크 체험 &#8599;</span>
+        </a>
+      </nav>
     </div>
-    <h1>말로 TTS 최종 쇼케이스</h1>
-    <p style="color:#94a3b8;font-size:1.05rem;margin-top:6px">
-      기존 키오스크 이용에 어려움을 겪는 고령 사용자를 위한 대화형 주문 시스템 <strong>말로(Mallo)</strong>의 TTS 최종 평가 쇼케이스입니다.<br>
-      공통 한국어 수사 정규화 기반 <strong>MeloTTS Baseline vs 파인튜닝 모델(G_2800)</strong> 비교 및 <strong>Adaptive Speed Levels(0·1·2)</strong> 청음을 제공합니다.
-    </p>
   </header>
 
-  <div class="card-grid">
-    <a class="nav-card" href="model-comparison.html">
-      <h3>🎧 모델별 비교 (Baseline vs G_2800) →</h3>
-      <p>대표 주문 문장 3종에 대한 Baseline 대비 파인튜닝 모델의 발음 및 음질 비교 (총 6개 음성)</p>
-    </a>
-    <a class="nav-card" href="speed-levels.html">
-      <h3>⚡ Adaptive Speed Levels (Level 0·1·2) →</h3>
-      <p>고령 사용자 맞춤형 속도 완화(0.95x ~ 0.70x) 및 문장 분절 3단계 정책 비교 (총 9개 음성)</p>
-    </a>
-    <a class="nav-card" href="results.json">
-      <h3>📋 메타데이터 JSON →</h3>
-      <p>전체 15개 WAV 음성의 레이턴시(ms), 재생 길이(초), 샘플레이트, 전처리 텍스트 메타데이터</p>
-    </a>
-  </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-deco-a" aria-hidden="true"></div>
+    <div class="hero-deco-b" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <div class="hero-badge-wrap">
+        <span class="hero-badge">
+          <svg class="icon icon-sm icon-gold" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Mallo · Speech Synthesis
+        </span>
+        <span class="hero-badge-sub">TTS Showcase</span>
+      </div>
+      <h1>말로 TTS <strong>최종 쇼케이스</strong></h1>
+      <p class="hero-desc">
+        고령 사용자의 편안한 주문 청취를 위해 친절체로 파인튜닝된 <strong>MeloTTS (G_2800)</strong> 음향 모델과,
+        사용자 요청에 따라 속도와 문장 호흡을 3단계로 조절하는 <strong>Adaptive Speed Levels</strong>를 직접 청취하고 비교할 수 있는 독립 기술 쇼케이스입니다.
+      </p>
+      <ul class="keyword-chips" aria-label="기술 구성 요소">
+        <li>MeloTTS Baseline vs Fine-tuned (G_2800)</li>
+        <li>Adaptive Speed Level 0 · 1 · 2</li>
+        <li>공통 한국어 수사 정규화</li>
+        <li>AI Hub 71349 데이터셋 기반</li>
+      </ul>
+    </div>
+  </section>
 
-  <h2>1. 모델별 비교 (MeloTTS Baseline vs Fine-tuned G_2800)</h2>
-  <p style="color:#94a3b8">모든 모델에 동일한 정규화 텍스트(한글 수사 표기)를 입력하여 순수 음향 모델 개선 효과를 비교합니다.</p>
+  <!-- Sub Navigation -->
+  <nav class="subnav-container" aria-label="TTS 쇼케이스 세부 메뉴">
+    <div class="container subnav-inner">
+      <a href="./" class="subnav-tab active" aria-current="page">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>통합 쇼케이스</span>
+      </a>
+      <a href="model-comparison.html" class="subnav-tab">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        <span>모델별 비교 (Baseline vs G_2800)</span>
+      </a>
+      <a href="speed-levels.html" class="subnav-tab">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>Adaptive Speed (Level 0·1·2)</span>
+      </a>
+      <a href="results.json" class="subnav-tab subnav-json" target="_blank" rel="noopener noreferrer">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>메타데이터 (JSON) &#8599;</span>
+      </a>
+    </div>
+  </nav>
 
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">따뜻한 아메리카노 2잔 총 9,400원입니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</dd>
-    </dl>
-    <h3>MeloTTS baseline</h3>
-    <audio controls preload="metadata" src="audio/model-quantity-price-melotts-baseline.wav"></audio>
-    <small>330045.6 ms, 4.39 초</small>
-    <h3>MeloTTS fine-tuned G_2800</h3>
-    <audio controls preload="metadata" src="audio/model-quantity-price-melotts-fine-tuned-g-2800.wav"></audio>
-    <small>1393.1 ms, 4.10 초</small>
-  </article>
+  <!-- Main Content -->
+  <main class="main-content container">
+    <!-- Big Navigation Cards -->
+    <div class="feature-nav-grid">
+      <a class="feature-nav-card" href="model-comparison.html">
+        <div>
+          <div class="feature-nav-header">
+            <div class="feature-nav-icon" aria-hidden="true">
+              <svg class="icon icon-md" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </div>
+            <h3>모델별 비교 (Baseline vs G_2800)</h3>
+          </div>
+          <p>대표 주문 문장 3종에 대한 MeloTTS 원본 베이스라인 대비 친절체 파인튜닝 모델의 발음 및 음질 비교 (총 6개 음성)</p>
+        </div>
+        <span class="feature-nav-arrow">모델별 비교 전용 페이지 이동 &rarr;</span>
+      </a>
 
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">캐모마일티 3잔을 주문하셨습니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">캐모마일티 세 잔을 주문하셨습니다.</dd>
-    </dl>
-    <h3>MeloTTS baseline</h3>
-    <audio controls preload="metadata" src="audio/model-unit-melotts-baseline.wav"></audio>
-    <small>493.1 ms, 3.54 초</small>
-    <h3>MeloTTS fine-tuned G_2800</h3>
-    <audio controls preload="metadata" src="audio/model-unit-melotts-fine-tuned-g-2800.wav"></audio>
-    <small>405.3 ms, 3.02 초</small>
-  </article>
+      <a class="feature-nav-card" href="speed-levels.html">
+        <div>
+          <div class="feature-nav-header">
+            <div class="feature-nav-icon" aria-hidden="true">
+              <svg class="icon icon-md" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3>Adaptive Speed (Level 0 · 1 · 2)</h3>
+          </div>
+          <p>고령 사용자 맞춤형 속도 완화(0.95x ~ 0.70x) 및 쉼표 휴지/문장 분절 3단계 정책 비교 (총 9개 음성)</p>
+        </div>
+        <span class="feature-nav-arrow">Adaptive Speed 전용 페이지 이동 &rarr;</span>
+      </a>
+    </div>
 
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">아메리카노 한 잔은 4,700원입니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">아메리카노 한 잔은 사천칠백원입니다.</dd>
-    </dl>
-    <h3>MeloTTS baseline</h3>
-    <audio controls preload="metadata" src="audio/model-price-melotts-baseline.wav"></audio>
-    <small>547.1 ms, 3.86 초</small>
-    <h3>MeloTTS fine-tuned G_2800</h3>
-    <audio controls preload="metadata" src="audio/model-price-melotts-fine-tuned-g-2800.wav"></audio>
-    <small>514.5 ms, 3.60 초</small>
-  </article>
+    <!-- Section 1: Model Comparison -->
+    <section class="section" id="model-comparison-section">
+      <div class="section-header">
+        <span class="section-tag">Section 1</span>
+        <h2 class="section-title">1. 모델별 비교 (MeloTTS Baseline vs Fine-tuned G_2800)</h2>
+        <p class="section-desc">
+          모든 모델에 동일한 한국어 수사 정규화(한글 표기) 텍스트를 입력하여 순수 음향 모델 개선 효과를 비교합니다.
+        </p>
+      </div>
 
-  <h2>2. 발화 속도 및 분절 비교 (Adaptive Levels 0 · 1 · 2)</h2>
-  <p style="color:#94a3b8">고령 사용자의 인지·청취 편의를 위해 Level별 속도(Level 0: 0.95x, Level 1: 0.85x, Level 2: 0.70x) 및 문장 분절 정책을 적용했습니다. 모델은 Fine-tuned G_2800을 사용합니다.</p>
+      <!-- Item 1 -->
+      <article class="sample-card">
+        <div class="sample-header">
+          <div class="sample-title-group">
+            <span class="case-badge">문장 01</span>
+            <h3 class="sample-title">수량 및 총 결제금액 안내</h3>
+            <span class="meta-pill">복합 수사 · 금액 단위</span>
+          </div>
+        </div>
 
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">따뜻한 아메리카노 2잔 총 9,400원입니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</dd>
-    </dl>
-    <h3>Level 0 (0.95x 기본 속도)</h3>
-    <p class="normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</p>
-    <audio controls preload="metadata" src="audio/speed-quantity-price-level-0.wav"></audio>
-    <small>513.6 ms, 4.10 초</small>
-    <h3>Level 1 (0.85x 보통 속도 + 쉼표 휴지)</h3>
-    <p class="normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</p>
-    <audio controls preload="metadata" src="audio/speed-quantity-price-level-1.wav"></audio>
-    <small>653.7 ms, 4.82 초</small>
-    <h3>Level 2 (0.70x 느린 속도 + 문장 분절)</h3>
-    <p class="normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</p>
-    <audio controls preload="metadata" src="audio/speed-quantity-price-level-2.wav"></audio>
-    <small>760.3 ms, 5.30 초</small>
-  </article>
+        <div class="sentence-meta-box">
+          <div class="sentence-row">
+            <span class="sentence-label">입력 원문</span>
+            <span class="text-original">따뜻한 아메리카노 2잔 총 9,400원입니다.</span>
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-label">공통 정규화</span>
+            <span class="text-normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</span>
+          </div>
+        </div>
 
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">캐모마일티 3잔을 주문하셨습니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">캐모마일티 세 잔을 주문하셨습니다.</dd>
-    </dl>
-    <h3>Level 0 (0.95x 기본 속도)</h3>
-    <p class="normalized">캐모마일티 세 잔을 주문하셨습니다.</p>
-    <audio controls preload="metadata" src="audio/speed-unit-level-0.wav"></audio>
-    <small>453.8 ms, 3.03 초</small>
-    <h3>Level 1 (0.85x 보통 속도 + 쉼표 휴지)</h3>
-    <p class="normalized">캐모마일티 세 잔, 주문하셨습니다.</p>
-    <audio controls preload="metadata" src="audio/speed-unit-level-1.wav"></audio>
-    <small>476.6 ms, 3.63 초</small>
-    <h3>Level 2 (0.70x 느린 속도 + 문장 분절)</h3>
-    <p class="normalized">캐모마일티. 세 잔입니다. 주문하셨습니다.</p>
-    <audio controls preload="metadata" src="audio/speed-unit-level-2.wav"></audio>
-    <small>799.1 ms, 5.57 초</small>
-  </article>
+        <div class="comparison-grid comparison-2col">
+          <!-- Baseline -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-baseline">MeloTTS baseline</span>
+            </div>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/model-quantity-price-melotts-baseline.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>레이턴시 330,045.6 ms</span>
+              <span>재생 4.39초</span>
+            </div>
+          </div>
 
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">아메리카노 한 잔은 4,700원입니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">아메리카노 한 잔은 사천칠백원입니다.</dd>
-    </dl>
-    <h3>Level 0 (0.95x 기본 속도)</h3>
-    <p class="normalized">아메리카노 한 잔은 사천칠백원입니다.</p>
-    <audio controls preload="metadata" src="audio/speed-price-level-0.wav"></audio>
-    <small>509.9 ms, 3.64 초</small>
-    <h3>Level 1 (0.85x 보통 속도 + 쉼표 휴지)</h3>
-    <p class="normalized">아메리카노 한 잔, 사천칠백원입니다.</p>
-    <audio controls preload="metadata" src="audio/speed-price-level-1.wav"></audio>
-    <small>575.5 ms, 4.27 초</small>
-    <h3>Level 2 (0.70x 느린 속도 + 문장 분절)</h3>
-    <p class="normalized">아메리카노. 한 잔입니다. 사천칠백원입니다.</p>
-    <audio controls preload="metadata" src="audio/speed-price-level-2.wav"></audio>
-    <small>832.0 ms, 6.18 초</small>
-  </article>
+          <!-- Fine-tuned G_2800 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-finetuned">MeloTTS fine-tuned G_2800</span>
+            </div>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/model-quantity-price-melotts-fine-tuned-g-2800.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>레이턴시 1,393.1 ms</span>
+              <span>재생 4.10초</span>
+            </div>
+          </div>
+        </div>
 
-  <footer style="margin-top:48px;padding:24px;border-top:1px solid #334155;color:#94a3b8;font-size:14px;line-height:1.6">
-  <p style="margin:0 0 8px 0;font-weight:600;color:#cbd5e1">데이터 출처 및 라이선스 고지</p>
-  <p style="margin:0">본 TTS 모델은 AI Hub 「감성 및 발화 스타일 동시 고려 음성합성 데이터」(데이터셋 번호 71349)를 활용해 학습되었습니다.<br>공개된 음성 샘플은 AI Hub 원천·라벨링·재가공 데이터가 아니며, 프로젝트에서 직접 작성한 새로운 문장을 학습된 모델로 생성한 결과물입니다.</p>
-</footer>
+        <div class="sample-note sample-note-coldstart">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div>
+            <strong>참고 (Cold-start):</strong> Baseline 첫 번째 샘플의 레이턴시(330,045.6ms)는 모델 초기 로드 및 메모리 할당(Cold-start)이 포함된 실측 기록입니다. 2회차 이후 샘플에서는 400~550ms대로 정상 수렴합니다.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 2 -->
+      <article class="sample-card">
+        <div class="sample-header">
+          <div class="sample-title-group">
+            <span class="case-badge">문장 02</span>
+            <h3 class="sample-title">단위 수량 주문 확인</h3>
+            <span class="meta-pill">메뉴명 · 잔 수 안내</span>
+          </div>
+        </div>
+
+        <div class="sentence-meta-box">
+          <div class="sentence-row">
+            <span class="sentence-label">입력 원문</span>
+            <span class="text-original">캐모마일티 3잔을 주문하셨습니다.</span>
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-label">공통 정규화</span>
+            <span class="text-normalized">캐모마일티 세 잔을 주문하셨습니다.</span>
+          </div>
+        </div>
+
+        <div class="comparison-grid comparison-2col">
+          <!-- Baseline -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-baseline">MeloTTS baseline</span>
+            </div>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/model-unit-melotts-baseline.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>레이턴시 493.1 ms</span>
+              <span>재생 3.54초</span>
+            </div>
+          </div>
+
+          <!-- Fine-tuned G_2800 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-finetuned">MeloTTS fine-tuned G_2800</span>
+            </div>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/model-unit-melotts-fine-tuned-g-2800.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>레이턴시 405.3 ms</span>
+              <span>재생 3.02초</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 3 -->
+      <article class="sample-card">
+        <div class="sample-header">
+          <div class="sample-title-group">
+            <span class="case-badge">문장 03</span>
+            <h3 class="sample-title">단품 금액 안내</h3>
+            <span class="meta-pill">단일 가격 안내</span>
+          </div>
+        </div>
+
+        <div class="sentence-meta-box">
+          <div class="sentence-row">
+            <span class="sentence-label">입력 원문</span>
+            <span class="text-original">아메리카노 한 잔은 4,700원입니다.</span>
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-label">공통 정규화</span>
+            <span class="text-normalized">아메리카노 한 잔은 사천칠백원입니다.</span>
+          </div>
+        </div>
+
+        <div class="comparison-grid comparison-2col">
+          <!-- Baseline -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-baseline">MeloTTS baseline</span>
+            </div>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/model-price-melotts-baseline.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>레이턴시 547.1 ms</span>
+              <span>재생 3.86초</span>
+            </div>
+          </div>
+
+          <!-- Fine-tuned G_2800 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-finetuned">MeloTTS fine-tuned G_2800</span>
+            </div>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/model-price-melotts-fine-tuned-g-2800.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>레이턴시 514.5 ms</span>
+              <span>재생 3.60초</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Section 2: Adaptive Speed Levels -->
+    <section class="section" id="speed-levels-section">
+      <div class="section-header">
+        <span class="section-tag">Section 2</span>
+        <h2 class="section-title">2. 발화 속도 및 분절 비교 (Adaptive Levels 0 · 1 · 2)</h2>
+        <p class="section-desc">
+          고령 사용자의 인지·청취 편의를 위해 Level별 속도(Level 0: 0.95x, Level 1: 0.85x, Level 2: 0.70x) 및 문장 분절 정책을 적용했습니다. 모델은 Fine-tuned G_2800을 사용합니다.
+        </p>
+      </div>
+
+      <!-- Policy Guide Card -->
+      <div class="policy-guide-box">
+        <h3 style="font-size:1.05rem;font-weight:800;color:var(--green-dark)">적응형 안내 정책 요약</h3>
+        <div class="policy-grid">
+          <div class="policy-card policy-card-lvl0">
+            <div class="policy-header">
+              <span class="policy-title">Level 0 (기본 속도)</span>
+              <span class="policy-speed" style="color:var(--lvl0-accent)">0.95x</span>
+            </div>
+            <p class="policy-desc">표준 대화 속도로 자연스러운 연결 문장 안내를 제공합니다.</p>
+          </div>
+          <div class="policy-card policy-card-lvl1">
+            <div class="policy-header">
+              <span class="policy-title">Level 1 (보통 속도)</span>
+              <span class="policy-speed" style="color:var(--lvl1-accent)">0.85x</span>
+            </div>
+            <p class="policy-desc">속도를 완화하고 주요 의미 단위마다 쉼표(,) 호흡 휴지를 배치합니다.</p>
+          </div>
+          <div class="policy-card policy-card-lvl2">
+            <div class="policy-header">
+              <span class="policy-title">Level 2 (느린 속도)</span>
+              <span class="policy-speed" style="color:var(--lvl2-accent)">0.70x</span>
+            </div>
+            <p class="policy-desc">문장을 명확한 단문(.)으로 쪼개어 인지 부담을 최소화합니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speed Item 1 -->
+      <article class="sample-card">
+        <div class="sample-header">
+          <div class="sample-title-group">
+            <span class="case-badge">문장 01</span>
+            <h3 class="sample-title">수량 및 총 결제금액 안내</h3>
+            <span class="meta-pill">Adaptive 3단계 비교</span>
+          </div>
+        </div>
+
+        <div class="sentence-meta-box">
+          <div class="sentence-row">
+            <span class="sentence-label">입력 원문</span>
+            <span class="text-original">따뜻한 아메리카노 2잔 총 9,400원입니다.</span>
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-label">공통 정규화</span>
+            <span class="text-normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</span>
+          </div>
+        </div>
+
+        <div class="comparison-grid comparison-3col">
+          <!-- Level 0 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl0">Level 0 (0.95x)</span>
+            </div>
+            <p class="pane-text">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-quantity-price-level-0.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>513.6 ms</span>
+              <span>4.10 초</span>
+            </div>
+          </div>
+
+          <!-- Level 1 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl1">Level 1 (0.85x + 쉼표)</span>
+            </div>
+            <p class="pane-text">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-quantity-price-level-1.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>653.7 ms</span>
+              <span>4.82 초</span>
+            </div>
+          </div>
+
+          <!-- Level 2 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl2">Level 2 (0.70x + 분절)</span>
+            </div>
+            <p class="pane-text">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-quantity-price-level-2.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>760.3 ms</span>
+              <span>5.30 초</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Speed Item 2 -->
+      <article class="sample-card">
+        <div class="sample-header">
+          <div class="sample-title-group">
+            <span class="case-badge">문장 02</span>
+            <h3 class="sample-title">단위 수량 주문 확인</h3>
+            <span class="meta-pill">Adaptive 3단계 비교</span>
+          </div>
+        </div>
+
+        <div class="sentence-meta-box">
+          <div class="sentence-row">
+            <span class="sentence-label">입력 원문</span>
+            <span class="text-original">캐모마일티 3잔을 주문하셨습니다.</span>
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-label">공통 정규화</span>
+            <span class="text-normalized">캐모마일티 세 잔을 주문하셨습니다.</span>
+          </div>
+        </div>
+
+        <div class="comparison-grid comparison-3col">
+          <!-- Level 0 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl0">Level 0 (0.95x)</span>
+            </div>
+            <p class="pane-text">캐모마일티 세 잔을 주문하셨습니다.</p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-unit-level-0.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>453.8 ms</span>
+              <span>3.03 초</span>
+            </div>
+          </div>
+
+          <!-- Level 1 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl1">Level 1 (0.85x + 쉼표)</span>
+            </div>
+            <p class="pane-text"><strong>캐모마일티 세 잔, 주문하셨습니다.</strong></p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-unit-level-1.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>476.6 ms</span>
+              <span>3.63 초</span>
+            </div>
+          </div>
+
+          <!-- Level 2 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl2">Level 2 (0.70x + 분절)</span>
+            </div>
+            <p class="pane-text"><strong>캐모마일티. 세 잔입니다. 주문하셨습니다.</strong></p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-unit-level-2.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>799.1 ms</span>
+              <span>5.57 초</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Speed Item 3 -->
+      <article class="sample-card">
+        <div class="sample-header">
+          <div class="sample-title-group">
+            <span class="case-badge">문장 03</span>
+            <h3 class="sample-title">단품 금액 안내</h3>
+            <span class="meta-pill">Adaptive 3단계 비교</span>
+          </div>
+        </div>
+
+        <div class="sentence-meta-box">
+          <div class="sentence-row">
+            <span class="sentence-label">입력 원문</span>
+            <span class="text-original">아메리카노 한 잔은 4,700원입니다.</span>
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-label">공통 정규화</span>
+            <span class="text-normalized">아메리카노 한 잔은 사천칠백원입니다.</span>
+          </div>
+        </div>
+
+        <div class="comparison-grid comparison-3col">
+          <!-- Level 0 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl0">Level 0 (0.95x)</span>
+            </div>
+            <p class="pane-text">아메리카노 한 잔은 사천칠백원입니다.</p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-price-level-0.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>509.9 ms</span>
+              <span>3.64 초</span>
+            </div>
+          </div>
+
+          <!-- Level 1 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl1">Level 1 (0.85x + 쉼표)</span>
+            </div>
+            <p class="pane-text"><strong>아메리카노 한 잔, 사천칠백원입니다.</strong></p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-price-level-1.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>575.5 ms</span>
+              <span>4.27 초</span>
+            </div>
+          </div>
+
+          <!-- Level 2 -->
+          <div class="comparison-pane">
+            <div class="pane-header">
+              <span class="pane-model-badge badge-lvl2">Level 2 (0.70x + 분절)</span>
+            </div>
+            <p class="pane-text"><strong>아메리카노. 한 잔입니다. 사천칠백원입니다.</strong></p>
+            <div class="audio-player-box-compact">
+              <audio controls preload="metadata" src="audio/speed-price-level-2.wav"></audio>
+            </div>
+            <div class="pane-meta">
+              <span>832.0 ms</span>
+              <span>6.18 초</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Technical Info Section -->
+    <section class="info-section">
+      <h3>
+        <svg class="icon icon-md icon-green" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        데이터 출처 및 라이선스 고지
+      </h3>
+      <p>
+        본 TTS 모델은 AI Hub 「감성 및 발화 스타일 동시 고려 음성합성 데이터」(데이터셋 번호 71349)를 활용해 학습되었습니다.
+      </p>
+      <p>
+        공개된 음성 샘플은 AI Hub 원천·라벨링·재가공 데이터가 아니며, 프로젝트에서 직접 작성한 새로운 주문 안내 문장을 학습된 모델로 생성한 정적 결과물입니다. 전체 15개 WAV 음성의 메타데이터는 <a href="./results.json" target="_blank" rel="noopener noreferrer" style="color:var(--green);font-weight:700">results.json &#8599;</a>에서 확인할 수 있습니다.
+      </p>
+    </section>
+
+    <!-- Cross-Project CTA Banner -->
+    <section class="cta-banner">
+      <h2>말로(Mallo)의 다른 기술도 <strong>확인해보세요</strong></h2>
+      <p>
+        Whisper 기반 도메인 파인튜닝 음성 인식 모델을 평가하는 STT 쇼케이스와 실제 키오스크 데모를 바로 체험할 수 있습니다.
+      </p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="https://nanocode00.github.io/stt_showcase/">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M8 22h8"/></svg>
+          STT 쇼케이스 살펴보기
+        </a>
+        <a class="btn btn-outline-white" href="https://nanocode00.github.io/mallo-intro/">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          말로 프로젝트 소개 보기
+        </a>
+        <a class="btn btn-outline-white" href="https://mallo-kiosk.vercel.app/" target="_blank" rel="noopener noreferrer">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          실제 키오스크 체험하기 &#8599;
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        AI Human 7기 · D조 프로젝트 <strong>말로(Mallo)</strong> TTS Showcase
+      </p>
+      <p style="margin-top:0.3rem;font-size:0.8rem;color:var(--ink-muted)">
+        MeloTTS Baseline vs Fine-tuned G_2800 · Adaptive Speed Policy
+      </p>
+    </div>
+  </footer>
 </body>
 </html>
