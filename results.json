@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-27T10:40:29.981868+00:00",
+  "common_preprocessor": "domain.korean_normalizer.normalize_korean_text_for_tts",
+  "model_comparison": [
+    {
+      "id": "quantity-price",
+      "original": "따뜻한 아메리카노 2잔 총 9,400원입니다.",
+      "normalized": "따뜻한 아메리카노 두 잔 총 구천사백원입니다.",
+      "voices": [
+        {
+          "model": "MeloTTS baseline",
+          "input_text": "따뜻한 아메리카노 두 잔 총 구천사백원입니다.",
+          "audio_file": "audio/model-quantity-price-melotts-baseline.wav",
+          "latency_ms": 330045.57,
+          "duration_s": 4.392,
+          "sample_rate": 44100
+        },
+        {
+          "model": "MeloTTS fine-tuned G_2800",
+          "input_text": "따뜻한 아메리카노 두 잔 총 구천사백원입니다.",
+          "audio_file": "audio/model-quantity-price-melotts-fine-tuned-g-2800.wav",
+          "latency_ms": 1393.057,
+          "duration_s": 4.102,
+          "sample_rate": 44100
+        }
+      ]
+    },
+    {
+      "id": "unit",
+      "original": "캐모마일티 3잔을 주문하셨습니다.",
+      "normalized": "캐모마일티 세 잔을 주문하셨습니다.",
+      "voices": [
+        {
+          "model": "MeloTTS baseline",
+          "input_text": "캐모마일티 세 잔을 주문하셨습니다.",
+          "audio_file": "audio/model-unit-melotts-baseline.wav",
+          "latency_ms": 493.08,
+          "duration_s": 3.545,
+          "sample_rate": 44100
+        },
+        {
+          "model": "MeloTTS fine-tuned G_2800",
+          "input_text": "캐모마일티 세 잔을 주문하셨습니다.",
+          "audio_file": "audio/model-unit-melotts-fine-tuned-g-2800.wav",
+          "latency_ms": 405.261,
+          "duration_s": 3.022,
+          "sample_rate": 44100
+        }
+      ]
+    },
+    {
+      "id": "price",
+      "original": "아메리카노 한 잔은 4,700원입니다.",
+      "normalized": "아메리카노 한 잔은 사천칠백원입니다.",
+      "voices": [
+        {
+          "model": "MeloTTS baseline",
+          "input_text": "아메리카노 한 잔은 사천칠백원입니다.",
+          "audio_file": "audio/model-price-melotts-baseline.wav",
+          "latency_ms": 547.147,
+          "duration_s": 3.858,
+          "sample_rate": 44100
+        },
+        {
+          "model": "MeloTTS fine-tuned G_2800",
+          "input_text": "아메리카노 한 잔은 사천칠백원입니다.",
+          "audio_file": "audio/model-price-melotts-fine-tuned-g-2800.wav",
+          "latency_ms": 514.476,
+          "duration_s": 3.603,
+          "sample_rate": 44100
+        }
+      ]
+    }
+  ],
+  "speed_comparison": [
+    {
+      "id": "quantity-price",
+      "original": "따뜻한 아메리카노 2잔 총 9,400원입니다.",
+      "normalized": "따뜻한 아메리카노 두 잔 총 구천사백원입니다.",
+      "model": "MeloTTS fine-tuned G_2800",
+      "levels": [
+        {
+          "level": 0,
+          "input_text": "따뜻한 아메리카노 두 잔 총 구천사백원입니다.",
+          "audio_file": "audio/speed-quantity-price-level-0.wav",
+          "latency_ms": 513.554,
+          "duration_s": 4.102,
+          "sample_rate": 44100
+        },
+        {
+          "level": 1,
+          "input_text": "따뜻한 아메리카노 두 잔 총 구천사백원입니다.",
+          "audio_file": "audio/speed-quantity-price-level-1.wav",
+          "latency_ms": 653.671,
+          "duration_s": 4.819,
+          "sample_rate": 44100
+        },
+        {
+          "level": 2,
+          "input_text": "따뜻한 아메리카노 두 잔 총 구천사백원입니다.",
+          "audio_file": "audio/speed-quantity-price-level-2.wav",
+          "latency_ms": 760.262,
+          "duration_s": 5.303,
+          "sample_rate": 44100
+        }
+      ]
+    },
+    {
+      "id": "unit",
+      "original": "캐모마일티 3잔을 주문하셨습니다.",
+      "normalized": "캐모마일티 세 잔을 주문하셨습니다.",
+      "model": "MeloTTS fine-tuned G_2800",
+      "levels": [
+        {
+          "level": 0,
+          "input_text": "캐모마일티 세 잔을 주문하셨습니다.",
+          "audio_file": "audio/speed-unit-level-0.wav",
+          "latency_ms": 453.766,
+          "duration_s": 3.034,
+          "sample_rate": 44100
+        },
+        {
+          "level": 1,
+          "input_text": "캐모마일티 세 잔, 주문하셨습니다.",
+          "audio_file": "audio/speed-unit-level-1.wav",
+          "latency_ms": 476.623,
+          "duration_s": 3.635,
+          "sample_rate": 44100
+        },
+        {
+          "level": 2,
+          "input_text": "캐모마일티. 세 잔입니다. 주문하셨습니다.",
+          "audio_file": "audio/speed-unit-level-2.wav",
+          "latency_ms": 799.136,
+          "duration_s": 5.567,
+          "sample_rate": 44100
+        }
+      ]
+    },
+    {
+      "id": "price",
+      "original": "아메리카노 한 잔은 4,700원입니다.",
+      "normalized": "아메리카노 한 잔은 사천칠백원입니다.",
+      "model": "MeloTTS fine-tuned G_2800",
+      "levels": [
+        {
+          "level": 0,
+          "input_text": "아메리카노 한 잔은 사천칠백원입니다.",
+          "audio_file": "audio/speed-price-level-0.wav",
+          "latency_ms": 509.906,
+          "duration_s": 3.637,
+          "sample_rate": 44100
+        },
+        {
+          "level": 1,
+          "input_text": "아메리카노 한 잔, 사천칠백원입니다.",
+          "audio_file": "audio/speed-price-level-1.wav",
+          "latency_ms": 575.491,
+          "duration_s": 4.273,
+          "sample_rate": 44100
+        },
+        {
+          "level": 2,
+          "input_text": "아메리카노. 한 잔입니다. 사천칠백원입니다.",
+          "audio_file": "audio/speed-price-level-2.wav",
+          "latency_ms": 831.975,
+          "duration_s": 6.182,
+          "sample_rate": 44100
+        }
+      ]
+    }
+  ]
+}

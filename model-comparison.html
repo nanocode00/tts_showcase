@@ -1,252 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>말로(Mallo) TTS 4대 모델(Baseline vs Fine-tuned) 종합 비교 쇼케이스</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI', Roboto, sans-serif; background: #0b1120; color: #f8fafc; padding: 25px; max-width: 1450px; margin: 0 auto; line-height: 1.6; }
-        h1 { color: #38bdf8; font-size: 1.9em; margin-bottom: 6px; }
-        p.subtitle { color: #94a3b8; font-size: 1.05em; margin-bottom: 25px; }
-        .grid-header { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
-        .card { background: #1e293b; padding: 16px 20px; border-radius: 12px; border-left: 5px solid #38bdf8; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .card.mb { border-left-color: #64748b; }
-        .card.mf { border-left-color: #10b981; }
-        .card.qb { border-left-color: #6366f1; }
-        .card.qf { border-left-color: #ec4899; }
-        .card h3 { margin: 0 0 6px 0; font-size: 1.1em; }
-        .card.mb h3 { color: #94a3b8; }
-        .card.mf h3 { color: #34d399; }
-        .card.qb h3 { color: #818cf8; }
-        .card.qf h3 { color: #f472b6; }
-        .card p { margin: 0; font-size: 0.85em; color: #cbd5e1; }
-        .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.75em; font-weight: 600; margin-top: 6px; }
-        .badge.mb { background: #334155; color: #cbd5e1; }
-        .badge.mf { background: #064e3b; color: #6ee7b7; }
-        .badge.qb { background: #312e81; color: #c7d2fe; }
-        .badge.qf { background: #831843; color: #fbcfe8; }
-        .table-container { background: #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th, td { padding: 12px 14px; border-bottom: 1px solid #334155; vertical-align: middle; }
-        th { background: #020617; color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        tr:last-child td { border-bottom: none; }
-        tr:hover { background: #27354a; }
-        .tag { background: #334155; color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: 600; white-space: nowrap; }
-        .cat { color: #38bdf8; font-size: 0.75em; display: block; margin-top: 2px; }
-        audio { height: 34px; width: 220px; }
-        .footer { text-align: center; margin-top: 30px; color: #64748b; font-size: 0.85em; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>말로 TTS 모델별 비교</title>
+  <style>body{max-width:1100px;margin:32px auto;padding:0 16px;font:16px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0b1120;color:#e2e8f0;line-height:1.6}
+h1{color:#38bdf8;font-size:1.85rem;margin-bottom:8px}
+h2{color:#7dd3fc;font-size:1.35rem;margin-top:36px;margin-bottom:12px;border-bottom:1px solid #334155;padding-bottom:8px}
+h3{margin:14px 0 6px 0;font-size:1.05rem}
+article{margin:16px 0;padding:20px;background:#1e293b;border-radius:12px;border:1px solid #334155}
+.original{color:#cbd5e1}
+.normalized{color:#86efac;font-weight:700}
+audio{width:100%;margin-top:8px}
+dl{display:grid;grid-template-columns:130px 1fr;gap:6px}
+dt{color:#94a3b8}
+dd{margin:0}
+small{color:#94a3b8;display:block;margin-top:4px}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;background:#0284c7;color:#fff}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0}
+.nav-card{display:block;padding:20px;background:#1e293b;border:1px solid #334155;border-radius:12px;text-decoration:none;color:#e2e8f0;transition:border-color .2s}
+.nav-card:hover{border-color:#38bdf8}
+.nav-card h3{margin:0 0 8px 0;color:#38bdf8}
+.nav-card p{margin:0;color:#94a3b8;font-size:14px}
+</style>
 </head>
 <body>
-    <a href="./" aria-label="쇼케이스 홈으로 돌아가기" style="display:inline-flex;align-items:center;gap:6px;margin:0 0 18px;padding:8px 12px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600">← 쇼케이스 홈</a>
-    <h1>☕ 말로(Mallo) TTS 4대 모델 (Baseline vs Fine-tuned) 종합 비교</h1>
-    <p class="subtitle">사전학습 원본(Baseline)과 AI Hub 71349 친절체 파인튜닝 모델의 20개 대표 주문 시나리오 전수 비교 청음 쇼케이스입니다.</p>
+  <nav style="display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap">
+  <a href="./" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">← 쇼케이스 홈</a>
+  <a href="model-comparison.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">🎧 모델별 비교</a>
+  <a href="speed-levels.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">⚡ Level 0·1·2 비교</a>
+  <a href="results.json" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#94a3b8;background:#1e293b;border:1px solid #334155;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">📋 메타데이터 (JSON)</a>
+</nav>
+  <h1>말로 TTS 모델별 비교</h1>
+  <p style="color:#94a3b8">모든 모델에 동일한 공통 정규화(수사·단위 한글화) 텍스트를 입력했습니다. 상대 경로 WAV만 사용하는 독립 정적 산출물입니다.</p>
 
-    <div class="grid-header">
-        <div class="card mb">
-            <h3>1. MeloTTS Baseline</h3>
-            <p>• <strong>지연:</strong> ~198ms (44.1kHz)<br>
-            • <strong>특징:</strong> 기본 사전학습 (무감정 톤)</p>
-            <span class="badge mb">VITS 기준군</span>
-        </div>
-        <div class="card mf">
-            <h3>2. MeloTTS 친절체 (G_3600)</h3>
-            <p>• <strong>지연:</strong> <strong>~180ms</strong> (44.1kHz)<br>
-            • <strong>특징:</strong> 차분한 어미 하강 친절체</p>
-            <span class="badge mf">실시간 키오스크 주력</span>
-        </div>
-        <div class="card qb">
-            <h3>3. Qwen3-TTS Baseline</h3>
-            <p>• <strong>지연:</strong> ~6.9s (24.0kHz)<br>
-            • <strong>특징:</strong> 0.6B Zero-shot ICL 기본</p>
-            <span class="badge qb">LLM 기준군</span>
-        </div>
-        <div class="card qf">
-            <h3>4. Qwen3-TTS 친절체 (299 LoRA)</h3>
-            <p>• <strong>지연:</strong> ~5-7s (24.0kHz)<br>
-            • <strong>특징:</strong> 실제 사람 같은 풍부한 감성 운율</p>
-            <span class="badge qf">고품질 감성 특화</span>
-        </div>
-    </div>
+  <article>
+    <dl>
+      <dt>원문</dt>
+      <dd class="original">따뜻한 아메리카노 2잔 총 9,400원입니다.</dd>
+      <dt>공통 정규화</dt>
+      <dd class="normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</dd>
+    </dl>
+    <h3>MeloTTS baseline</h3>
+    <audio controls preload="metadata" src="audio/model-quantity-price-melotts-baseline.wav"></audio>
+    <small>330045.6 ms, 4.39 초</small>
+    <h3>MeloTTS fine-tuned G_2800</h3>
+    <audio controls preload="metadata" src="audio/model-quantity-price-melotts-fine-tuned-g-2800.wav"></audio>
+    <small>1393.1 ms, 4.10 초</small>
+  </article>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 7%;">ID</th>
-                    <th style="width: 25%;">카페 주문 안내 문장 (Text)</th>
-                    <th style="width: 17%;">MeloTTS Baseline</th>
-                    <th style="width: 17%;">⚡ MeloTTS 친절체</th>
-                    <th style="width: 17%;">Qwen3 Baseline</th>
-                    <th style="width: 17%;">🎧 Qwen3 친절체 (299개)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span class="tag">tts_eval_01</span><span class="cat">menu_temperature</span></td>
-                    <td><strong>아이스 아메리카노 한 잔을 주문에 담았습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-001.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-002.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-003.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-004.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_02</span><span class="cat">menu_temperature</span></td>
-                    <td><strong>따뜻한 카페라떼 한 잔을 추가했습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-005.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-006.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-007.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-008.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_03</span><span class="cat">menu_temperature</span></td>
-                    <td><strong>아이스 바닐라라떼와 따뜻한 말차라떼를 준비해 드릴게요.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-009.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-010.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-011.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-012.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_04</span><span class="cat">menu_temperature</span></td>
-                    <td><strong>자몽에이드는 차가운 음료로만 주문하실 수 있습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-013.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-014.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-015.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-016.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_05</span><span class="cat">quantity_unit</span></td>
-                    <td><strong>아메리카노 두 잔과 카페라떼 한 잔을 담았습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-017.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-018.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-019.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-020.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_06</span><span class="cat">quantity_unit</span></td>
-                    <td><strong>캐모마일티 3잔을 주문하셨습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-021.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-022.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-023.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-024.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_07</span><span class="cat">quantity_unit</span></td>
-                    <td><strong>크로플 아이스크림 두 개를 추가했습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-025.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-026.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-027.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-028.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_08</span><span class="cat">quantity_unit</span></td>
-                    <td><strong>바스크 치즈 케이크 한 개와 아이스티 4잔을 확인했습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-029.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-030.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-031.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-032.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_09</span><span class="cat">price_total</span></td>
-                    <td><strong>아메리카노 한 잔은 4,700원입니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-033.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-034.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-035.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-036.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_10</span><span class="cat">price_total</span></td>
-                    <td><strong>카페라떼 두 잔은 모두 10,400원입니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-037.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-038.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-039.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-040.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_11</span><span class="cat">price_total</span></td>
-                    <td><strong>자몽에이드와 말차라떼 한 잔씩은 모두 칠천 원입니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-041.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-042.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-043.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-044.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_12</span><span class="cat">price_total</span></td>
-                    <td><strong>바스크 치즈 케이크와 크로플 아이스크림의 합계는 12,000원입니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-045.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-046.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-047.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-048.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_13</span><span class="cat">modify_delete</span></td>
-                    <td><strong>아메리카노 수량을 두 잔에서 한 잔으로 변경했습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-049.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-050.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-051.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-052.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_14</span><span class="cat">modify_delete</span></td>
-                    <td><strong>따뜻한 밀크티를 아이스 밀크티로 변경했습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-053.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-054.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-055.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-056.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_15</span><span class="cat">modify_delete</span></td>
-                    <td><strong>바닐라라떼 한 잔을 주문에서 삭제했습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-057.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-058.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-059.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-060.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_16</span><span class="cat">modify_delete</span></td>
-                    <td><strong>카페라떼는 그대로 두고 캐모마일티만 삭제할까요?</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-061.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-062.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-063.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-064.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_17</span><span class="cat">summary_payment</span></td>
-                    <td><strong>아이스 아메리카노 두 잔과 바스크 치즈 케이크 한 개가 담겨 있습니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-065.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-066.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-067.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-068.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_18</span><span class="cat">summary_payment</span></td>
-                    <td><strong>주문은 자몽에이드 한 잔, 아이스티 한 잔, 크로플 아이스크림 한 개입니다.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-069.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-070.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-071.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-072.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_19</span><span class="cat">summary_payment</span></td>
-                    <td><strong>총 결제 금액은 15,400원입니다. 결제를 진행할까요?</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-073.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-074.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-075.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-076.wav"></audio></td>
-                </tr>
-                <tr>
-                    <td><span class="tag">tts_eval_20</span><span class="cat">summary_payment</span></td>
-                    <td><strong>주문 내용을 확인했습니다. 카드로 구천구백 원을 결제해 주세요.</strong></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-077.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-078.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-079.wav"></audio></td>
-                    <td><audio controls src="assets/audio/model-comparison/audio-080.wav"></audio></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="footer">
-        말로(Mallo) Adaptive Voice-first Kiosk • TTS Baseline vs Fine-tuned 20-Sentence Evaluation
-    </div>
+  <article>
+    <dl>
+      <dt>원문</dt>
+      <dd class="original">캐모마일티 3잔을 주문하셨습니다.</dd>
+      <dt>공통 정규화</dt>
+      <dd class="normalized">캐모마일티 세 잔을 주문하셨습니다.</dd>
+    </dl>
+    <h3>MeloTTS baseline</h3>
+    <audio controls preload="metadata" src="audio/model-unit-melotts-baseline.wav"></audio>
+    <small>493.1 ms, 3.54 초</small>
+    <h3>MeloTTS fine-tuned G_2800</h3>
+    <audio controls preload="metadata" src="audio/model-unit-melotts-fine-tuned-g-2800.wav"></audio>
+    <small>405.3 ms, 3.02 초</small>
+  </article>
+
+  <article>
+    <dl>
+      <dt>원문</dt>
+      <dd class="original">아메리카노 한 잔은 4,700원입니다.</dd>
+      <dt>공통 정규화</dt>
+      <dd class="normalized">아메리카노 한 잔은 사천칠백원입니다.</dd>
+    </dl>
+    <h3>MeloTTS baseline</h3>
+    <audio controls preload="metadata" src="audio/model-price-melotts-baseline.wav"></audio>
+    <small>547.1 ms, 3.86 초</small>
+    <h3>MeloTTS fine-tuned G_2800</h3>
+    <audio controls preload="metadata" src="audio/model-price-melotts-fine-tuned-g-2800.wav"></audio>
+    <small>514.5 ms, 3.60 초</small>
+  </article>
+
+  <footer style="margin-top:48px;padding:24px;border-top:1px solid #334155;color:#94a3b8;font-size:14px;line-height:1.6">
+  <p style="margin:0 0 8px 0;font-weight:600;color:#cbd5e1">데이터 출처 및 라이선스 고지</p>
+  <p style="margin:0">본 TTS 모델은 AI Hub 「감성 및 발화 스타일 동시 고려 음성합성 데이터」(데이터셋 번호 71349)를 활용해 학습되었습니다.<br>공개된 음성 샘플은 AI Hub 원천·라벨링·재가공 데이터가 아니며, 프로젝트에서 직접 작성한 새로운 문장을 학습된 모델로 생성한 결과물입니다.</p>
+</footer>
 </body>
 </html>

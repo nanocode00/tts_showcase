@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>말로(Mallo) TTS 최종 쇼케이스</title>
+  <title>말로 TTS Level 0·1·2 비교</title>
   <style>body{max-width:1100px;margin:32px auto;padding:0 16px;font:16px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0b1120;color:#e2e8f0;line-height:1.6}
 h1{color:#38bdf8;font-size:1.85rem;margin-bottom:8px}
 h2{color:#7dd3fc;font-size:1.35rem;margin-top:36px;margin-bottom:12px;border-bottom:1px solid #334155;padding-bottom:8px}
@@ -31,84 +31,8 @@ small{color:#94a3b8;display:block;margin-top:4px}
   <a href="speed-levels.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#e0f2fe;background:#1e293b;border:1px solid #475569;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">⚡ Level 0·1·2 비교</a>
   <a href="results.json" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;color:#94a3b8;background:#1e293b;border:1px solid #334155;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">📋 메타데이터 (JSON)</a>
 </nav>
-
-  <header style="margin-bottom:32px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-      <span class="badge">Mallo Kiosk</span>
-      <span style="color:#94a3b8;font-size:14px">Adaptive Voice-first Order System</span>
-    </div>
-    <h1>말로 TTS 최종 쇼케이스</h1>
-    <p style="color:#94a3b8;font-size:1.05rem;margin-top:6px">
-      기존 키오스크 이용에 어려움을 겪는 고령 사용자를 위한 대화형 주문 시스템 <strong>말로(Mallo)</strong>의 TTS 최종 평가 쇼케이스입니다.<br>
-      공통 한국어 수사 정규화 기반 <strong>MeloTTS Baseline vs 파인튜닝 모델(G_2800)</strong> 비교 및 <strong>Adaptive Speed Levels(0·1·2)</strong> 청음을 제공합니다.
-    </p>
-  </header>
-
-  <div class="card-grid">
-    <a class="nav-card" href="model-comparison.html">
-      <h3>🎧 모델별 비교 (Baseline vs G_2800) →</h3>
-      <p>대표 주문 문장 3종에 대한 Baseline 대비 파인튜닝 모델의 발음 및 음질 비교 (총 6개 음성)</p>
-    </a>
-    <a class="nav-card" href="speed-levels.html">
-      <h3>⚡ Adaptive Speed Levels (Level 0·1·2) →</h3>
-      <p>고령 사용자 맞춤형 속도 완화(0.95x ~ 0.70x) 및 문장 분절 3단계 정책 비교 (총 9개 음성)</p>
-    </a>
-    <a class="nav-card" href="results.json">
-      <h3>📋 메타데이터 JSON →</h3>
-      <p>전체 15개 WAV 음성의 레이턴시(ms), 재생 길이(초), 샘플레이트, 전처리 텍스트 메타데이터</p>
-    </a>
-  </div>
-
-  <h2>1. 모델별 비교 (MeloTTS Baseline vs Fine-tuned G_2800)</h2>
-  <p style="color:#94a3b8">모든 모델에 동일한 정규화 텍스트(한글 수사 표기)를 입력하여 순수 음향 모델 개선 효과를 비교합니다.</p>
-
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">따뜻한 아메리카노 2잔 총 9,400원입니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">따뜻한 아메리카노 두 잔 총 구천사백원입니다.</dd>
-    </dl>
-    <h3>MeloTTS baseline</h3>
-    <audio controls preload="metadata" src="audio/model-quantity-price-melotts-baseline.wav"></audio>
-    <small>330045.6 ms, 4.39 초</small>
-    <h3>MeloTTS fine-tuned G_2800</h3>
-    <audio controls preload="metadata" src="audio/model-quantity-price-melotts-fine-tuned-g-2800.wav"></audio>
-    <small>1393.1 ms, 4.10 초</small>
-  </article>
-
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">캐모마일티 3잔을 주문하셨습니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">캐모마일티 세 잔을 주문하셨습니다.</dd>
-    </dl>
-    <h3>MeloTTS baseline</h3>
-    <audio controls preload="metadata" src="audio/model-unit-melotts-baseline.wav"></audio>
-    <small>493.1 ms, 3.54 초</small>
-    <h3>MeloTTS fine-tuned G_2800</h3>
-    <audio controls preload="metadata" src="audio/model-unit-melotts-fine-tuned-g-2800.wav"></audio>
-    <small>405.3 ms, 3.02 초</small>
-  </article>
-
-  <article>
-    <dl>
-      <dt>원문</dt>
-      <dd class="original">아메리카노 한 잔은 4,700원입니다.</dd>
-      <dt>공통 정규화</dt>
-      <dd class="normalized">아메리카노 한 잔은 사천칠백원입니다.</dd>
-    </dl>
-    <h3>MeloTTS baseline</h3>
-    <audio controls preload="metadata" src="audio/model-price-melotts-baseline.wav"></audio>
-    <small>547.1 ms, 3.86 초</small>
-    <h3>MeloTTS fine-tuned G_2800</h3>
-    <audio controls preload="metadata" src="audio/model-price-melotts-fine-tuned-g-2800.wav"></audio>
-    <small>514.5 ms, 3.60 초</small>
-  </article>
-
-  <h2>2. 발화 속도 및 분절 비교 (Adaptive Levels 0 · 1 · 2)</h2>
-  <p style="color:#94a3b8">고령 사용자의 인지·청취 편의를 위해 Level별 속도(Level 0: 0.95x, Level 1: 0.85x, Level 2: 0.70x) 및 문장 분절 정책을 적용했습니다. 모델은 Fine-tuned G_2800을 사용합니다.</p>
+  <h1>말로 TTS Level 0·1·2 비교</h1>
+  <p style="color:#94a3b8">공통 정규화 후 기존 Adaptive Level 변환과 속도 정책(Level 0: 0.95x, Level 1: 0.85x, Level 2: 0.70x)을 적용했습니다. 상대 경로 WAV만 사용하는 독립 정적 산출물입니다.</p>
 
   <article>
     <dl>
