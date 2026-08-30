@@ -1,1 +1,291 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>말로 TTS Adaptive Speed 비교 — Level 0 · 1 · 2</title><meta name="description" content="production Adaptive TTS 정책과 같은 chunk 단위 합성·silence gap 비교"><link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png"><link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon-192.png"><link rel="icon" type="image/x-icon" href="./favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png"><meta name="theme-color" content="#1e3932"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="./styles/showcase.css"><style>.adaptive-detail{display:grid;grid-template-columns:105px 1fr;gap:.35rem .6rem;margin:.8rem 0;font-size:.82rem}.adaptive-detail dt{font-weight:700;color:var(--ink-muted)}.adaptive-detail dd{margin:0;overflow-wrap:anywhere}.chunk-list{padding:.5rem;background:#f5f8f6;border-radius:6px}</style></head><body><header class="site-header"><div class="container header-inner"><a class="brand" href="./" aria-label="TTS 쇼케이스 홈으로 이동"><span class="brand-mark">mallo</span><span class="brand-ko">말로</span></a><nav class="header-nav" aria-label="메인 네비게이션"><a class="nav-link" href="./">통합 쇼케이스</a><a class="nav-link" href="model-comparison.html">모델별 비교</a><a class="nav-link active" href="speed-levels.html" aria-current="page">Adaptive Speed</a></nav></div></header><section class="hero"><div class="container hero-content"><div class="hero-badge-wrap"><span class="hero-badge">Mallo · Production Adaptive Policy</span><span class="hero-badge-sub">Level 0 · 1 · 2 Comparison</span></div><h1>말로 TTS <strong>Adaptive Speed 비교</strong></h1><p class="hero-desc">production과 동일하게 각 chunk를 Level별로 합성하고, 다음 chunk 전 실제 silence gap을 WAV에 넣었습니다.</p><ul class="keyword-chips"><li>Level 0: 1.00x · gap 0ms</li><li>Level 1: 0.85x · gap 280ms</li><li>Level 2: 0.75x · gap 480ms</li><li>모델: Fine-tuned G_2800</li></ul></div></section><nav class="subnav-container" aria-label="TTS 쇼케이스 세부 메뉴"><div class="container subnav-inner"><a href="./" class="subnav-tab">통합 쇼케이스</a><a href="model-comparison.html" class="subnav-tab">모델별 비교 (Baseline vs G_2800)</a><a href="speed-levels.html" class="subnav-tab active" aria-current="page">Adaptive Speed (Level 0·1·2)</a><a href="results.json" class="subnav-tab subnav-json" target="_blank" rel="noopener noreferrer">메타데이터 (JSON) ↗</a></div></nav><main class="main-content container"><div class="policy-guide-box"><h2 style="font-size:1.15rem;font-weight:800;color:var(--green-dark);margin-bottom:.4rem">현재 production Adaptive TTS 정책</h2><div class="policy-grid"><div class="policy-card policy-card-lvl0"><div class="policy-header"><span class="policy-title">Level 0</span><span class="policy-speed">1.00x / 0ms</span></div><p class="policy-desc">정규화된 원문을 기본 속도로 안내합니다.</p></div><div class="policy-card policy-card-lvl1"><div class="policy-header"><span class="policy-title">Level 1</span><span class="policy-speed">0.85x / 280ms</span></div><p class="policy-desc">`transform_to_chunks()`의 문장·쉼표 경계를 사용합니다.</p></div><div class="policy-card policy-card-lvl2"><div class="policy-header"><span class="policy-title">Level 2</span><span class="policy-speed">0.75x / 480ms</span></div><p class="policy-desc">허용된 주문 결과만 semantic realization 후 더 작은 원문 의미 경계를 사용합니다.</p></div></div><p class="section-desc">자동 감속은 성공적으로 해석된 최근 4 turn 안의 두 번째 `REQUEST_CLARIFICATION`에서 한 단계만 올립니다. 명시적 `REQUEST_SLOWER`는 0→1→2로 올리고, 기본 속도 요청 또는 세션 reset은 Level 0으로 돌립니다. 반복 요청만으로는 레벨이 바뀌지 않습니다.</p></div><section class="section"><div class="section-header"><span class="section-tag">Chunk-by-Chunk Listening</span><h2 class="section-title">문장별 Level 0 · 1 · 2 청취 비교</h2><p class="section-desc">실제 합성에 사용된 텍스트와 chunk를 각 플레이어에 함께 표시합니다.</p></div><article class="sample-card"><div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 01</span><h3 class="sample-title">장바구니 요약</h3><span class="meta-pill">실제 주문 엔진 장바구니 요약 응답</span></div></div><div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">이전 대표 문장</span><span class="text-original">매장 이용 주문으로 현재 아이스 아메리카노 한 잔과 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</span></div><div class="sentence-row"><span class="sentence-label">L0/L1 원본 응답</span><span class="text-normalized">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</span></div><div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.</span></div></div><div class="comparison-grid comparison-3col"><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 · 1.00x</span></div><p class="pane-text">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>1.00x</dd><dt>silence gap</dt><dd>0 ms × 2</dd><dt>chunk 방식</dt><dd>_SessionApp display segment 후 Level 0 정규화 (gap 없음)</dd><dt>적용 목적</dt><dd>기본 속도로 원문 응답을 안내합니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">매장 이용 주문으로 현재 아이스 아메리카노 한 잔,<br>따뜻한 카페라떼 두 잔이 담겨 있으며,<br>총 만 오천백원입니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-0.wav"></audio></div><div class="pane-meta"><span>합성 8540.4 ms</span><span>재생 10.01 초</span></div></div><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 · 0.85x</span></div><p class="pane-text">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>0.85x</dd><dt>silence gap</dt><dd>280 ms × 2</dd><dt>chunk 방식</dt><dd>AdaptiveTextTransformer: 문장·쉼표 경계</dd><dt>적용 목적</dt><dd>속도를 낮추고 원문 문장·쉼표 경계에서 호흡을 둡니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">매장 이용 주문으로 현재 아이스 아메리카노 한 잔,<br>따뜻한 카페라떼 두 잔이 담겨 있으며,<br>총 만 오천백원입니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-1.wav"></audio></div><div class="pane-meta"><span>합성 1668.8 ms</span><span>재생 12.08 초</span></div></div><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 · 0.75x</span></div><p class="pane-text">매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>0.75x</dd><dt>silence gap</dt><dd>480 ms × 3</dd><dt>chunk 방식</dt><dd>AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</dd><dt>적용 목적</dt><dd>가장 느린 속도와 더 짧은 원문 의미 경계로 재안내합니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">매장 이용 주문입니다.<br>아이스 아메리카노 한 잔입니다.<br>따뜻한 카페라떼 두 잔입니다.<br>총 결제 금액은 만 오천백원입니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-2.wav"></audio></div><div class="pane-meta"><span>합성 2133.0 ms</span><span>재생 15.44 초</span></div></div></div></article><article class="sample-card"><div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 02</span><h3 class="sample-title">복수 메뉴 추가 결과</h3><span class="meta-pill">실제 주문 엔진 장바구니 요약 응답</span></div></div><div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">이전 대표 문장</span><span class="text-original">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">L0/L1 원본 응답</span><span class="text-normalized">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.</span></div></div><div class="comparison-grid comparison-3col"><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 · 1.00x</span></div><p class="pane-text">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>1.00x</dd><dt>silence gap</dt><dd>0 ms × 0</dd><dt>chunk 방식</dt><dd>_SessionApp display segment 후 Level 0 정규화 (gap 없음)</dd><dt>적용 목적</dt><dd>기본 속도로 원문 응답을 안내합니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-0.wav"></audio></div><div class="pane-meta"><span>합성 970.5 ms</span><span>재생 6.01 초</span></div></div><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 · 0.85x</span></div><p class="pane-text">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>0.85x</dd><dt>silence gap</dt><dd>280 ms × 0</dd><dt>chunk 방식</dt><dd>AdaptiveTextTransformer: 문장·쉼표 경계</dd><dt>적용 목적</dt><dd>속도를 낮추고 원문 문장·쉼표 경계에서 호흡을 둡니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-1.wav"></audio></div><div class="pane-meta"><span>합성 1260.5 ms</span><span>재생 7.08 초</span></div></div><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 · 0.75x</span></div><p class="pane-text">아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>0.75x</dd><dt>silence gap</dt><dd>480 ms × 2</dd><dt>chunk 방식</dt><dd>AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</dd><dt>적용 목적</dt><dd>가장 느린 속도와 더 짧은 원문 의미 경계로 재안내합니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">아이스 아메리카노 한 잔입니다.<br>바스크 치즈 케이크 한 개입니다.<br>장바구니에 담았습니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-2.wav"></audio></div><div class="pane-meta"><span>합성 1489.6 ms</span><span>재생 10.73 초</span></div></div></div></article><article class="sample-card"><div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 03</span><h3 class="sample-title">가격 안내</h3><span class="meta-pill">실제 주문 엔진 장바구니 요약 응답</span></div></div><div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">이전 대표 문장</span><span class="text-original">카페라떼 한 잔은 5,200원입니다.</span></div><div class="sentence-row"><span class="sentence-label">L0/L1 원본 응답</span><span class="text-normalized">카페라떼 한 잔은 5,200원입니다.</span></div><div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">카페라떼 한 잔은 5,200원입니다.</span></div></div><div class="comparison-grid comparison-3col"><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 · 1.00x</span></div><p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>1.00x</dd><dt>silence gap</dt><dd>0 ms × 0</dd><dt>chunk 방식</dt><dd>_SessionApp display segment 후 Level 0 정규화 (gap 없음)</dd><dt>적용 목적</dt><dd>기본 속도로 원문 응답을 안내합니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">카페라떼 한 잔은 오천이백원입니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-0.wav"></audio></div><div class="pane-meta"><span>합성 509.9 ms</span><span>재생 3.40 초</span></div></div><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 · 0.85x</span></div><p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>0.85x</dd><dt>silence gap</dt><dd>280 ms × 0</dd><dt>chunk 방식</dt><dd>AdaptiveTextTransformer: 문장·쉼표 경계</dd><dt>적용 목적</dt><dd>속도를 낮추고 원문 문장·쉼표 경계에서 호흡을 둡니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">카페라떼 한 잔은 오천이백원입니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-1.wav"></audio></div><div class="pane-meta"><span>합성 537.3 ms</span><span>재생 3.92 초</span></div></div><div class="comparison-pane"><div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 · 0.75x</span></div><p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p><dl class="adaptive-detail"><dt>실제 speed</dt><dd>0.75x</dd><dt>silence gap</dt><dd>480 ms × 0</dd><dt>chunk 방식</dt><dd>AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</dd><dt>적용 목적</dt><dd>가장 느린 속도와 더 짧은 원문 의미 경계로 재안내합니다.</dd><dt>실제 합성 chunk</dt><dd class="chunk-list">카페라떼 한 잔은 오천이백원입니다.</dd></dl><div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-2.wav"></audio></div><div class="pane-meta"><span>합성 757.0 ms</span><span>재생 4.34 초</span></div></div></div></article></section><section class="cta-banner"><h2>Baseline과 Fine-tuned G_2800 비교는 <strong>별도 페이지에서 유지합니다</strong></h2><div class="cta-actions"><a class="btn btn-primary" href="model-comparison.html">MeloTTS 모델별 비교 보기</a></div></section></main><footer class="site-footer"><div class="container"><p>AI Human 7기 · D조 프로젝트 <strong>말로</strong> TTS Showcase</p><p style="margin-top:.3rem;font-size:.8rem;color:var(--ink-muted)">Adaptive Speed Levels (1.00x / 0.85x / 0.75x · 0ms / 280ms / 480ms)</p></div></footer></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>말로(Mallo) TTS Adaptive Speed 비교 — Level 0 · 1 · 2</title>
+  <meta name="description" content="고령 사용자의 청취 편의를 위해 발화 속도 완화와 문장 분절을 3단계로 적용한 Adaptive TTS 비교 전용 페이지">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon-192.png">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#1e3932">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="./styles/showcase.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://nanocode00.github.io/mallo-intro/" aria-label="말로 소개 홈으로 이동">
+        <span class="brand-mark">mallo</span>
+        <span class="brand-ko">말로</span>
+      </a>
+      <nav class="header-nav" aria-label="메인 네비게이션">
+        <a class="nav-link" href="https://nanocode00.github.io/mallo-intro/">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>소개 홈</span>
+        </a>
+        <a class="nav-link" href="https://nanocode00.github.io/stt_showcase/">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M8 22h8"/></svg>
+          <span>STT</span>
+        </a>
+        <a class="nav-link active" href="https://nanocode00.github.io/tts_showcase/" aria-current="page">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <span>TTS</span>
+        </a>
+        <a class="nav-link nav-kiosk-btn" href="https://mallo-kiosk.vercel.app/" target="_blank" rel="noopener noreferrer">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          <span>키오스크 체험 &#8599;</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-deco-a" aria-hidden="true"></div>
+    <div class="hero-deco-b" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <div class="hero-badge-wrap">
+        <span class="hero-badge">
+          <svg class="icon icon-sm icon-gold" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Mallo · Adaptive Policy
+        </span>
+        <span class="hero-badge-sub">Level 0 · 1 · 2 Comparison</span>
+      </div>
+      <h1>말로 TTS <strong>Adaptive Speed 비교</strong></h1>
+      <p class="hero-desc">
+        고령 사용자의 "다시 말해줘", "천천히 말해줘" 피드백에 따라 발화 속도 완화와 문장 호흡 분절을 3단계로 조절하는 적응형 TTS 정책을 비교 청취합니다.
+      </p>
+      <ul class="keyword-chips" aria-label="정책 요약">
+        <li>Level 0: 1.00x / 0ms</li>
+        <li>Level 1: 0.85x / 280ms</li>
+        <li>Level 2: 0.75x / 480ms</li>
+        <li>모델: Fine-tuned G_2800</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Sub Navigation -->
+  <nav class="subnav-container" aria-label="TTS 쇼케이스 세부 메뉴">
+    <div class="container subnav-inner">
+      <a href="./" class="subnav-tab">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>통합 쇼케이스</span>
+      </a>
+      <a href="model-comparison.html" class="subnav-tab">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        <span>모델별 비교 (Baseline vs G_2800)</span>
+      </a>
+      <a href="speed-levels.html" class="subnav-tab active" aria-current="page">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>Adaptive Speed (Level 0·1·2)</span>
+      </a>
+      <a href="results.json" class="subnav-tab subnav-json" target="_blank" rel="noopener noreferrer">
+        <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>메타데이터 (JSON) &#8599;</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content container">
+    <!-- Policy Guide Card -->
+    <div class="policy-guide-box">
+      <h2 style="font-size:1.15rem;font-weight:800;color:var(--green-dark);margin-bottom:0.4rem">고령자 맞춤형 3단계 발화 속도 및 분절 정책</h2>
+      <p class="section-desc" style="margin-top:0">
+        “느릴수록 무조건 좋은 것”이 아니라, 사용자의 인지 상태와 재확인 요구 빈도에 맞추어 인지 부담을 점진적으로 덜어주는 적응형 단계 정책입니다.
+      </p>
+      <div class="policy-grid">
+        <div class="policy-card policy-card-lvl0">
+          <div class="policy-header">
+            <span class="policy-title">Level 0 (기본 속도)</span>
+            <span class="policy-speed" style="color:var(--lvl0-accent)">1.00x / 0ms</span>
+          </div>
+          <p class="policy-desc">표준 대화 속도로 자연스러운 연결 문장 안내를 제공합니다.</p>
+        </div>
+        <div class="policy-card policy-card-lvl1">
+          <div class="policy-header">
+            <span class="policy-title">Level 1 (보통 속도)</span>
+            <span class="policy-speed" style="color:var(--lvl1-accent)">0.85x / 280ms</span>
+          </div>
+          <p class="policy-desc">속도를 완화하고 주요 의미 단위마다 쉼표(,) 호흡 휴지를 배치합니다.</p>
+        </div>
+        <div class="policy-card policy-card-lvl2">
+          <div class="policy-header">
+            <span class="policy-title">Level 2 (느린 속도)</span>
+            <span class="policy-speed" style="color:var(--lvl2-accent)">0.75x / 480ms</span>
+          </div>
+          <p class="policy-desc">문장을 명확한 단문(.)으로 쪼개어 인지 부담을 최소화합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: 3-column Comparison Cards -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Step-by-Step Comparison</span>
+        <h2 class="section-title">문장별 Level 0 · 1 · 2 청취 비교</h2>
+        <p class="section-desc">
+          각 문장마다 Level 0에서 Level 2로 갈수록 말의 속도와 문장 구조가 어떻게 변화하는지 직접 들어보세요.
+        </p>
+      </div>
+
+      <!-- Speed Item 1 -->
+      <article class="sample-card">
+        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 01</span><h3 class="sample-title">장바구니 요약</h3><span class="meta-pill">production Adaptive TTS 결과</span></div></div>
+        <div class="sentence-meta-box">
+          <div class="sentence-row"><span class="sentence-label">대표 문장</span><span class="text-original">매장 이용 주문으로 현재 아이스 아메리카노 한 잔과 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</span></div>
+          <div class="sentence-row"><span class="sentence-label">L0/L1 응답</span><span class="text-normalized">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</span></div>
+          <div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.</span></div>
+        </div>
+        <div class="comparison-grid comparison-3col">
+          <!-- Level 0 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 (1.00x / 0ms)</span></div>
+            <p class="pane-text">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">매장 이용 주문으로 현재 아이스 아메리카노 한 잔,<br>따뜻한 카페라떼 두 잔이 담겨 있으며,<br>총 만 오천백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">_SessionApp display segment 후 Level 0 정규화 (gap 없음)</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-0.wav"></audio></div>
+            <div class="pane-meta"><span>합성 8540.4 ms</span><span>재생 10.01 초</span></div>
+          </div>
+          <!-- Level 1 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 (0.85x / 280ms)</span></div>
+            <p class="pane-text">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">매장 이용 주문으로 현재 아이스 아메리카노 한 잔,<br>따뜻한 카페라떼 두 잔이 담겨 있으며,<br>총 만 오천백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveTextTransformer: 문장·쉼표 경계</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-1.wav"></audio></div>
+            <div class="pane-meta"><span>합성 1668.8 ms</span><span>재생 12.08 초</span></div>
+          </div>
+          <!-- Level 2 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 (0.75x / 480ms)</span></div>
+            <p class="pane-text">매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">매장 이용 주문입니다.<br>아이스 아메리카노 한 잔입니다.<br>따뜻한 카페라떼 두 잔입니다.<br>총 결제 금액은 만 오천백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-2.wav"></audio></div>
+            <div class="pane-meta"><span>합성 2133.0 ms</span><span>재생 15.44 초</span></div>
+          </div>
+        </div>
+      </article>
+      <!-- Speed Item 2 -->
+      <article class="sample-card">
+        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 02</span><h3 class="sample-title">복수 메뉴 추가 결과</h3><span class="meta-pill">production Adaptive TTS 결과</span></div></div>
+        <div class="sentence-meta-box">
+          <div class="sentence-row"><span class="sentence-label">대표 문장</span><span class="text-original">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 담았습니다.</span></div>
+          <div class="sentence-row"><span class="sentence-label">L0/L1 응답</span><span class="text-normalized">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</span></div>
+          <div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.</span></div>
+        </div>
+        <div class="comparison-grid comparison-3col">
+          <!-- Level 0 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 (1.00x / 0ms)</span></div>
+            <p class="pane-text">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">_SessionApp display segment 후 Level 0 정규화 (gap 없음)</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-0.wav"></audio></div>
+            <div class="pane-meta"><span>합성 970.5 ms</span><span>재생 6.01 초</span></div>
+          </div>
+          <!-- Level 1 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 (0.85x / 280ms)</span></div>
+            <p class="pane-text">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveTextTransformer: 문장·쉼표 경계</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-1.wav"></audio></div>
+            <div class="pane-meta"><span>합성 1260.5 ms</span><span>재생 7.08 초</span></div>
+          </div>
+          <!-- Level 2 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 (0.75x / 480ms)</span></div>
+            <p class="pane-text">아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">아이스 아메리카노 한 잔입니다.<br>바스크 치즈 케이크 한 개입니다.<br>장바구니에 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-2.wav"></audio></div>
+            <div class="pane-meta"><span>합성 1489.6 ms</span><span>재생 10.73 초</span></div>
+          </div>
+        </div>
+      </article>
+      <!-- Speed Item 3 -->
+      <article class="sample-card">
+        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 03</span><h3 class="sample-title">가격 안내</h3><span class="meta-pill">production Adaptive TTS 결과</span></div></div>
+        <div class="sentence-meta-box">
+          <div class="sentence-row"><span class="sentence-label">대표 문장</span><span class="text-original">카페라떼 한 잔은 5,200원입니다.</span></div>
+          <div class="sentence-row"><span class="sentence-label">L0/L1 응답</span><span class="text-normalized">카페라떼 한 잔은 5,200원입니다.</span></div>
+          <div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">카페라떼 한 잔은 5,200원입니다.</span></div>
+        </div>
+        <div class="comparison-grid comparison-3col">
+          <!-- Level 0 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 (1.00x / 0ms)</span></div>
+            <p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">카페라떼 한 잔은 오천이백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">_SessionApp display segment 후 Level 0 정규화 (gap 없음)</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-0.wav"></audio></div>
+            <div class="pane-meta"><span>합성 509.9 ms</span><span>재생 3.40 초</span></div>
+          </div>
+          <!-- Level 1 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 (0.85x / 280ms)</span></div>
+            <p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">카페라떼 한 잔은 오천이백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveTextTransformer: 문장·쉼표 경계</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-1.wav"></audio></div>
+            <div class="pane-meta"><span>합성 537.3 ms</span><span>재생 3.92 초</span></div>
+          </div>
+          <!-- Level 2 -->
+          <div class="comparison-pane">
+            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 (0.75x / 480ms)</span></div>
+            <p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p>
+            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">카페라떼 한 잔은 오천이백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</span></div></div>
+            <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-2.wav"></audio></div>
+            <div class="pane-meta"><span>합성 757.0 ms</span><span>재생 4.34 초</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Technical Info Section -->
+    <section class="info-section">
+      <h3>
+        <svg class="icon icon-md icon-green" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        데이터 출처 및 라이선스 고지
+      </h3>
+      <p>
+        본 TTS 모델은 AI Hub 「감성 및 발화 스타일 동시 고려 음성합성 데이터」(데이터셋 번호 71349)를 활용해 학습되었습니다.
+      </p>
+      <p>
+        공개된 음성 샘플은 AI Hub 원천·라벨링·재가공 데이터가 아니며, 프로젝트에서 직접 작성한 새로운 주문 안내 문장을 학습된 모델로 생성한 정적 결과물입니다.
+      </p>
+    </section>
+
+    <!-- Cross-Project CTA Banner -->
+    <section class="cta-banner">
+      <h2>MeloTTS 원본과 파인튜닝 모델도 <strong>비교해보세요</strong></h2>
+      <p>
+        Baseline 대비 개선된 발음과 자연스러움을 비교하는 모델 비교 전용 페이지와 실제 키오스크를 체험해보세요.
+      </p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="model-comparison.html">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          MeloTTS 모델별 비교 보기
+        </a>
+        <a class="btn btn-outline-white" href="https://nanocode00.github.io/stt_showcase/">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M8 22h8"/></svg>
+          STT 쇼케이스 살펴보기
+        </a>
+        <a class="btn btn-outline-white" href="https://mallo-kiosk.vercel.app/" target="_blank" rel="noopener noreferrer">
+          <svg class="icon icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          키오스크 체험하기 &#8599;
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        AI Human 7기 · D조 프로젝트 <strong>말로(Mallo)</strong> TTS Showcase
+      </p>
+      <p style="margin-top:0.3rem;font-size:0.8rem;color:var(--ink-muted)">
+        Adaptive Speed Levels (1.00x / 0ms · 0.85x / 280ms · 0.75x / 480ms) Policy
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
