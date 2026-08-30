@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-30T08:54:29.259004+00:00",
+  "generated_at": "2026-08-30T13:40:26.330834+00:00",
   "common_preprocessor": "domain.korean_normalizer.normalize_korean_text_for_tts",
   "model_comparison": [
     {
@@ -76,10 +76,10 @@
   "speed_comparison": [
     {
       "id": "quantity-price",
-      "title": "수량 + 가격",
-      "original": "따뜻한 아메리카노 2잔 총 9,400원입니다.",
-      "canonical_response": "현재 따뜻한 아메리카노 두 잔이 담겨 있으며, 총 9,400원입니다.",
-      "level_2_response": "따뜻한 아메리카노 두 잔입니다. 총 결제 금액은 9,400원입니다.",
+      "title": "장바구니 요약",
+      "original": "매장 이용 주문으로 현재 아이스 아메리카노 한 잔과 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.",
+      "canonical_response": "매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.",
+      "level_2_response": "매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.",
       "source": "QUERY_CART after ADD_ITEM",
       "levels": [
         {
@@ -87,18 +87,20 @@
           "speed": 1.0,
           "gap_ms": 0,
           "purpose": "기본 속도로 원문 응답을 안내합니다.",
-          "realized_text": "현재 따뜻한 아메리카노 두 잔이 담겨 있으며, 총 9,400원입니다.",
+          "realized_text": "매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.",
           "chunks": [
-            "현재 따뜻한 아메리카노 두 잔이 담겨 있으며,",
-            "총 구천사백원입니다."
+            "매장 이용 주문으로 현재 아이스 아메리카노 한 잔,",
+            "따뜻한 카페라떼 두 잔이 담겨 있으며,",
+            "총 만 오천백원입니다."
           ],
           "chunk_policy": "_SessionApp display segment 후 Level 0 정규화 (gap 없음)",
           "audio_file": "audio/speed-quantity-price-level-0.wav",
-          "latency_ms": 6943.539,
-          "duration_s": 6.021,
+          "latency_ms": 8540.431,
+          "duration_s": 10.007,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            3.719,
+            4.311,
+            3.394,
             2.302
           ],
           "silence_duration_s": 0.0
@@ -108,51 +110,57 @@
           "speed": 0.85,
           "gap_ms": 280,
           "purpose": "속도를 낮추고 원문 문장·쉼표 경계에서 호흡을 둡니다.",
-          "realized_text": "현재 따뜻한 아메리카노 두 잔이 담겨 있으며, 총 9,400원입니다.",
+          "realized_text": "매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.",
           "chunks": [
-            "현재 따뜻한 아메리카노 두 잔이 담겨 있으며,",
-            "총 구천사백원입니다."
+            "매장 이용 주문으로 현재 아이스 아메리카노 한 잔,",
+            "따뜻한 카페라떼 두 잔이 담겨 있으며,",
+            "총 만 오천백원입니다."
           ],
           "chunk_policy": "AdaptiveTextTransformer: 문장·쉼표 경계",
           "audio_file": "audio/speed-quantity-price-level-1.wav",
-          "latency_ms": 1011.735,
-          "duration_s": 7.271,
+          "latency_ms": 1668.83,
+          "duration_s": 12.079,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            4.32,
-            2.671
+            4.958,
+            3.797,
+            2.764
           ],
-          "silence_duration_s": 0.28
+          "silence_duration_s": 0.56
         },
         {
           "level": 2,
           "speed": 0.75,
           "gap_ms": 480,
           "purpose": "가장 느린 속도와 더 짧은 원문 의미 경계로 재안내합니다.",
-          "realized_text": "따뜻한 아메리카노 두 잔입니다. 총 결제 금액은 9,400원입니다.",
+          "realized_text": "매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.",
           "chunks": [
-            "따뜻한 아메리카노 두 잔입니다.",
-            "총 결제 금액은 구천사백원입니다."
+            "매장 이용 주문입니다.",
+            "아이스 아메리카노 한 잔입니다.",
+            "따뜻한 카페라떼 두 잔입니다.",
+            "총 결제 금액은 만 오천백원입니다."
           ],
           "chunk_policy": "AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계",
           "audio_file": "audio/speed-quantity-price-level-2.wav",
-          "latency_ms": 1189.849,
-          "duration_s": 8.357,
+          "latency_ms": 2133.037,
+          "duration_s": 15.441,
           "sample_rate": 44100,
           "chunk_durations_s": [
+            2.691,
+            3.399,
             3.596,
-            4.281
+            4.316
           ],
-          "silence_duration_s": 0.48
+          "silence_duration_s": 1.44
         }
       ]
     },
     {
       "id": "unit",
-      "title": "단위 / 수량",
-      "original": "캐모마일티 3잔을 주문하셨습니다.",
-      "canonical_response": "현재 따뜻한 캐모마일티 3잔이 담겨 있으며, 총 11,100원입니다.",
-      "level_2_response": "따뜻한 캐모마일티 세 잔입니다. 총 결제 금액은 11,100원입니다.",
+      "title": "복수 메뉴 추가 결과",
+      "original": "아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 담았습니다.",
+      "canonical_response": "아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.",
+      "level_2_response": "아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.",
       "source": "QUERY_CART after ADD_ITEM",
       "levels": [
         {
@@ -160,19 +168,17 @@
           "speed": 1.0,
           "gap_ms": 0,
           "purpose": "기본 속도로 원문 응답을 안내합니다.",
-          "realized_text": "현재 따뜻한 캐모마일티 3잔이 담겨 있으며, 총 11,100원입니다.",
+          "realized_text": "아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.",
           "chunks": [
-            "현재 따뜻한 캐모마일티 세 잔이 담겨 있으며,",
-            "총 만 천백원입니다."
+            "아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다."
           ],
           "chunk_policy": "_SessionApp display segment 후 Level 0 정규화 (gap 없음)",
           "audio_file": "audio/speed-unit-level-0.wav",
-          "latency_ms": 887.538,
-          "duration_s": 5.975,
+          "latency_ms": 970.526,
+          "duration_s": 6.006,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            3.905,
-            2.07
+            6.006
           ],
           "silence_duration_s": 0.0
         },
@@ -181,51 +187,51 @@
           "speed": 0.85,
           "gap_ms": 280,
           "purpose": "속도를 낮추고 원문 문장·쉼표 경계에서 호흡을 둡니다.",
-          "realized_text": "현재 따뜻한 캐모마일티 3잔이 담겨 있으며, 총 11,100원입니다.",
+          "realized_text": "아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.",
           "chunks": [
-            "현재 따뜻한 캐모마일티 세 잔이 담겨 있으며,",
-            "총 만 천백원입니다."
+            "아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다."
           ],
           "chunk_policy": "AdaptiveTextTransformer: 문장·쉼표 경계",
           "audio_file": "audio/speed-unit-level-1.wav",
-          "latency_ms": 1067.471,
-          "duration_s": 7.201,
+          "latency_ms": 1260.461,
+          "duration_s": 7.083,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            4.517,
-            2.404
+            7.083
           ],
-          "silence_duration_s": 0.28
+          "silence_duration_s": 0.0
         },
         {
           "level": 2,
           "speed": 0.75,
           "gap_ms": 480,
           "purpose": "가장 느린 속도와 더 짧은 원문 의미 경계로 재안내합니다.",
-          "realized_text": "따뜻한 캐모마일티 세 잔입니다. 총 결제 금액은 11,100원입니다.",
+          "realized_text": "아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.",
           "chunks": [
-            "따뜻한 캐모마일티 세 잔입니다.",
-            "총 결제 금액은 만 천백원입니다."
+            "아이스 아메리카노 한 잔입니다.",
+            "바스크 치즈 케이크 한 개입니다.",
+            "장바구니에 담았습니다."
           ],
           "chunk_policy": "AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계",
           "audio_file": "audio/speed-unit-level-2.wav",
-          "latency_ms": 1131.909,
-          "duration_s": 8.148,
+          "latency_ms": 1489.598,
+          "duration_s": 10.727,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            3.724,
-            3.944
+            3.387,
+            3.538,
+            2.841
           ],
-          "silence_duration_s": 0.48
+          "silence_duration_s": 0.96
         }
       ]
     },
     {
       "id": "price",
-      "title": "가격",
-      "original": "아메리카노 한 잔은 4,700원입니다.",
-      "canonical_response": "현재 따뜻한 아메리카노 한 잔이 담겨 있으며, 총 4,700원입니다.",
-      "level_2_response": "따뜻한 아메리카노 한 잔입니다. 총 결제 금액은 4,700원입니다.",
+      "title": "가격 안내",
+      "original": "카페라떼 한 잔은 5,200원입니다.",
+      "canonical_response": "카페라떼 한 잔은 5,200원입니다.",
+      "level_2_response": "카페라떼 한 잔은 5,200원입니다.",
       "source": "QUERY_CART after ADD_ITEM",
       "levels": [
         {
@@ -233,19 +239,17 @@
           "speed": 1.0,
           "gap_ms": 0,
           "purpose": "기본 속도로 원문 응답을 안내합니다.",
-          "realized_text": "현재 따뜻한 아메리카노 한 잔이 담겨 있으며, 총 4,700원입니다.",
+          "realized_text": "카페라떼 한 잔은 5,200원입니다.",
           "chunks": [
-            "현재 따뜻한 아메리카노 한 잔이 담겨 있으며,",
-            "총 사천칠백원입니다."
+            "카페라떼 한 잔은 오천이백원입니다."
           ],
           "chunk_policy": "_SessionApp display segment 후 Level 0 정규화 (gap 없음)",
           "audio_file": "audio/speed-price-level-0.wav",
-          "latency_ms": 849.033,
-          "duration_s": 6.277,
+          "latency_ms": 509.853,
+          "duration_s": 3.405,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            3.905,
-            2.372
+            3.405
           ],
           "silence_duration_s": 0.0
         },
@@ -254,42 +258,38 @@
           "speed": 0.85,
           "gap_ms": 280,
           "purpose": "속도를 낮추고 원문 문장·쉼표 경계에서 호흡을 둡니다.",
-          "realized_text": "현재 따뜻한 아메리카노 한 잔이 담겨 있으며, 총 4,700원입니다.",
+          "realized_text": "카페라떼 한 잔은 5,200원입니다.",
           "chunks": [
-            "현재 따뜻한 아메리카노 한 잔이 담겨 있으며,",
-            "총 사천칠백원입니다."
+            "카페라떼 한 잔은 오천이백원입니다."
           ],
           "chunk_policy": "AdaptiveTextTransformer: 문장·쉼표 경계",
           "audio_file": "audio/speed-price-level-1.wav",
-          "latency_ms": 1045.554,
-          "duration_s": 7.573,
+          "latency_ms": 537.313,
+          "duration_s": 3.925,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            4.563,
-            2.729
+            3.925
           ],
-          "silence_duration_s": 0.28
+          "silence_duration_s": 0.0
         },
         {
           "level": 2,
           "speed": 0.75,
           "gap_ms": 480,
           "purpose": "가장 느린 속도와 더 짧은 원문 의미 경계로 재안내합니다.",
-          "realized_text": "따뜻한 아메리카노 한 잔입니다. 총 결제 금액은 4,700원입니다.",
+          "realized_text": "카페라떼 한 잔은 5,200원입니다.",
           "chunks": [
-            "따뜻한 아메리카노 한 잔입니다.",
-            "총 결제 금액은 사천칠백원입니다."
+            "카페라떼 한 잔은 오천이백원입니다."
           ],
           "chunk_policy": "AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계",
           "audio_file": "audio/speed-price-level-2.wav",
-          "latency_ms": 1232.616,
-          "duration_s": 8.705,
+          "latency_ms": 757.001,
+          "duration_s": 4.339,
           "sample_rate": 44100,
           "chunk_durations_s": [
-            3.817,
-            4.409
+            4.339
           ],
-          "silence_duration_s": 0.48
+          "silence_duration_s": 0.0
         }
       ]
     }
