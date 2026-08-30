@@ -134,106 +134,73 @@
 
       <!-- Speed Item 1 -->
       <article class="sample-card">
-        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 01</span><h3 class="sample-title">장바구니 요약</h3><span class="meta-pill">production Adaptive TTS 결과</span></div></div>
+        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 01</span><h3 class="sample-title">장바구니 요약</h3></div></div>
         <div class="sentence-meta-box">
-          <div class="sentence-row"><span class="sentence-label">대표 문장</span><span class="text-original">매장 이용 주문으로 현재 아이스 아메리카노 한 잔과 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</span></div>
-          <div class="sentence-row"><span class="sentence-label">L0/L1 응답</span><span class="text-normalized">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</span></div>
-          <div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.</span></div>
+          <p class="pane-text" style="margin:0">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</p>
         </div>
         <div class="comparison-grid comparison-3col">
-          <!-- Level 0 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 (1.00x / 0ms)</span></div>
-            <p class="pane-text">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">매장 이용 주문으로 현재 아이스 아메리카노 한 잔,<br>따뜻한 카페라떼 두 잔이 담겨 있으며,<br>총 만 오천백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">_SessionApp display segment 후 Level 0 정규화 (gap 없음)</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0</span></div>
+            <p class="pane-text">1.00x / 0ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-0.wav"></audio></div>
-            <div class="pane-meta"><span>합성 8540.4 ms</span><span>재생 10.01 초</span></div>
           </div>
-          <!-- Level 1 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 (0.85x / 280ms)</span></div>
-            <p class="pane-text">매장 이용 주문으로 현재 아이스 아메리카노 한 잔, 따뜻한 카페라떼 두 잔이 담겨 있으며, 총 15,100원입니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">매장 이용 주문으로 현재 아이스 아메리카노 한 잔,<br>따뜻한 카페라떼 두 잔이 담겨 있으며,<br>총 만 오천백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveTextTransformer: 문장·쉼표 경계</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1</span></div>
+            <p class="pane-text">0.85x / 280ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-1.wav"></audio></div>
-            <div class="pane-meta"><span>합성 1668.8 ms</span><span>재생 12.08 초</span></div>
           </div>
-          <!-- Level 2 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 (0.75x / 480ms)</span></div>
-            <p class="pane-text">매장 이용 주문입니다. 아이스 아메리카노 한 잔입니다. 따뜻한 카페라떼 두 잔입니다. 총 결제 금액은 15,100원입니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">매장 이용 주문입니다.<br>아이스 아메리카노 한 잔입니다.<br>따뜻한 카페라떼 두 잔입니다.<br>총 결제 금액은 만 오천백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2</span></div>
+            <p class="pane-text">0.75x / 480ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-quantity-price-level-2.wav"></audio></div>
-            <div class="pane-meta"><span>합성 2133.0 ms</span><span>재생 15.44 초</span></div>
           </div>
         </div>
       </article>
       <!-- Speed Item 2 -->
       <article class="sample-card">
-        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 02</span><h3 class="sample-title">복수 메뉴 추가 결과</h3><span class="meta-pill">production Adaptive TTS 결과</span></div></div>
+        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 02</span><h3 class="sample-title">복수 메뉴 추가 결과</h3></div></div>
         <div class="sentence-meta-box">
-          <div class="sentence-row"><span class="sentence-label">대표 문장</span><span class="text-original">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 담았습니다.</span></div>
-          <div class="sentence-row"><span class="sentence-label">L0/L1 응답</span><span class="text-normalized">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</span></div>
-          <div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.</span></div>
+          <p class="pane-text" style="margin:0">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</p>
         </div>
         <div class="comparison-grid comparison-3col">
-          <!-- Level 0 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 (1.00x / 0ms)</span></div>
-            <p class="pane-text">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">_SessionApp display segment 후 Level 0 정규화 (gap 없음)</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0</span></div>
+            <p class="pane-text">1.00x / 0ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-0.wav"></audio></div>
-            <div class="pane-meta"><span>합성 970.5 ms</span><span>재생 6.01 초</span></div>
           </div>
-          <!-- Level 1 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 (0.85x / 280ms)</span></div>
-            <p class="pane-text">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">아이스 아메리카노 한 잔과 바스크 치즈 케이크 한 개를 장바구니에 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveTextTransformer: 문장·쉼표 경계</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1</span></div>
+            <p class="pane-text">0.85x / 280ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-1.wav"></audio></div>
-            <div class="pane-meta"><span>합성 1260.5 ms</span><span>재생 7.08 초</span></div>
           </div>
-          <!-- Level 2 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 (0.75x / 480ms)</span></div>
-            <p class="pane-text">아이스 아메리카노 한 잔입니다. 바스크 치즈 케이크 한 개입니다. 장바구니에 담았습니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">아이스 아메리카노 한 잔입니다.<br>바스크 치즈 케이크 한 개입니다.<br>장바구니에 담았습니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2</span></div>
+            <p class="pane-text">0.75x / 480ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-unit-level-2.wav"></audio></div>
-            <div class="pane-meta"><span>합성 1489.6 ms</span><span>재생 10.73 초</span></div>
           </div>
         </div>
       </article>
       <!-- Speed Item 3 -->
       <article class="sample-card">
-        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 03</span><h3 class="sample-title">가격 안내</h3><span class="meta-pill">production Adaptive TTS 결과</span></div></div>
+        <div class="sample-header"><div class="sample-title-group"><span class="case-badge">문장 03</span><h3 class="sample-title">가격 안내</h3></div></div>
         <div class="sentence-meta-box">
-          <div class="sentence-row"><span class="sentence-label">대표 문장</span><span class="text-original">카페라떼 한 잔은 5,200원입니다.</span></div>
-          <div class="sentence-row"><span class="sentence-label">L0/L1 응답</span><span class="text-normalized">카페라떼 한 잔은 5,200원입니다.</span></div>
-          <div class="sentence-row"><span class="sentence-label">L2 semantic response</span><span class="text-normalized">카페라떼 한 잔은 5,200원입니다.</span></div>
+          <p class="pane-text" style="margin:0">카페라떼 한 잔은 5,200원입니다.</p>
         </div>
         <div class="comparison-grid comparison-3col">
-          <!-- Level 0 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0 (1.00x / 0ms)</span></div>
-            <p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">카페라떼 한 잔은 오천이백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">_SessionApp display segment 후 Level 0 정규화 (gap 없음)</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl0">Level 0</span></div>
+            <p class="pane-text">1.00x / 0ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-0.wav"></audio></div>
-            <div class="pane-meta"><span>합성 509.9 ms</span><span>재생 3.40 초</span></div>
           </div>
-          <!-- Level 1 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1 (0.85x / 280ms)</span></div>
-            <p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">카페라떼 한 잔은 오천이백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveTextTransformer: 문장·쉼표 경계</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl1">Level 1</span></div>
+            <p class="pane-text">0.85x / 280ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-1.wav"></audio></div>
-            <div class="pane-meta"><span>합성 537.3 ms</span><span>재생 3.92 초</span></div>
           </div>
-          <!-- Level 2 -->
           <div class="comparison-pane">
-            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2 (0.75x / 480ms)</span></div>
-            <p class="pane-text">카페라떼 한 잔은 5,200원입니다.</p>
-            <div class="sentence-meta-box"><div class="sentence-row"><span class="sentence-label">실제 합성 chunk</span><span class="text-normalized">카페라떼 한 잔은 오천이백원입니다.</span></div><div class="sentence-row"><span class="sentence-label">chunk 방식</span><span class="text-original">AdaptiveResponseRealizer 후 AdaptiveTextTransformer: 문장·접속 어미 경계</span></div></div>
+            <div class="pane-header"><span class="pane-model-badge badge-lvl2">Level 2</span></div>
+            <p class="pane-text">0.75x / 480ms</p>
             <div class="audio-player-box-compact"><audio controls preload="metadata" src="audio/speed-price-level-2.wav"></audio></div>
-            <div class="pane-meta"><span>합성 757.0 ms</span><span>재생 4.34 초</span></div>
           </div>
         </div>
       </article>
